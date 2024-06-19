@@ -19,6 +19,8 @@ Route::middleware(['auth:api', 'role:admin'])->post('register-doctor', [AuthCont
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('me', [AuthController::class, 'me']);
 
+Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']); // Ruta para logout
+
 
 
 Route::middleware(['auth:api', 'role:admin'])->group(function () {

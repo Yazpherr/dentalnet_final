@@ -16,42 +16,42 @@ class AuthController extends Controller
 
 
     public function register(Request $request)
-{
-    // Valida la solicitud
-    $validator = Validator::make($request->all(), [
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:10|confirmed',
-        'role' => 'patient'
-    ]);
+    {
+        // Valida la solicitud
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:10|confirmed'
+        ]);
 
-    // Si la validación falla, devuelve una respuesta con los errores
-    if ($validator->fails()) {
+        // Si la validación falla, devuelve una respuesta con los errores
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Crear el usuario con rol por defecto 'patient'
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'patient', // Rol por defecto
+        ]);
+
+        // Generar el token
+        $token = JWTAuth::fromUser($user);
+
+        // Devolver la respuesta con el usuario y el token
         return response()->json([
-            'success' => false,
-            'message' => 'Validation errors',
-            'errors' => $validator->errors()
-        ], 422);
+            'success' => true,
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
-    // Crear el usuario
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role,
-    ]);
-
-    // Generar el token
-    $token = JWTAuth::fromUser($user);
-
-    // Devolver la respuesta con el usuario y el token
-    return response()->json([
-        'success' => true,
-        'user' => $user,
-        'token' => $token
-    ], 201);
-}
 
 public function registerDoctor(Request $request)
 {
@@ -97,13 +97,25 @@ public function login(Request $request)
         if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 400);
         }
+
+        $user = Auth::user(); // Obtener el usuario autenticado
     } catch (JWTException $e) {
         // Maneja errores de JWT
         return response()->json(['error' => 'Could not create token'], 500);
     }
 
-    // Devuelve la respuesta con el token
-    return response()->json(compact('token'));
+    // Devuelve la respuesta con el token y el usuario
+    return response()->json(compact('token', 'user'));
+}
+
+public function logout(Request $request)
+{
+    try {
+        Auth::guard('api')->logout();
+        return response()->json(['message' => 'Successfully logged out']);
+    } catch (JWTException $exception) {
+        return response()->json(['error' => 'Failed to log out, please try again.'], 500);
+    }
 }
 
     public function me()
