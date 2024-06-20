@@ -24,6 +24,7 @@ Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout'])
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
     Route::post('/register-dentist', [AuthController::class, 'registerDentist']);
+    Route::get('/dentists', [AdminController::class, 'getDentists']);
 });
 
 // Rutas para doctores
