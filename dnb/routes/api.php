@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\DentistController;
 use App\Http\Controllers\PatientController;
+use App\Http\Controllers\PrescriptionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -14,30 +15,26 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('register', [AuthController::class, 'register']);
-Route::middleware(['auth:api', 'role:admin'])->post('register-doctor', [AuthController::class, 'registerDoctor']);
-
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('me', [AuthController::class, 'me']);
-
 Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']); // Ruta para logout
 
 
-
+// Rutas para administradores
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
+    Route::post('/register-dentist', [AuthController::class, 'registerDentist']);
 });
 
+// Rutas para doctores
 Route::middleware(['auth:api', 'role:doctor'])->group(function () {
-    Route::get('/doctor', [DoctorController::class, 'index']);
+    Route::get('/doctor', [DentistController::class, 'index']);
+    Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']);
 });
 
-
-// Grupo de middleware para autenticación
-Route::middleware(['auth:api'])->group(function () {
-    // Ruta para obtener el perfil del paciente (solo para pacientes)
-    Route::middleware('role:patient')->get('/patient', [PatientController::class, 'index']);
-
-    // Ruta para actualizar el perfil del paciente (solo para pacientes)
-    Route::middleware('role:patient')->post('/update-profile', [PatientController::class, 'updateProfile']);
+// Rutas para pacientes
+Route::middleware(['auth:api', 'role:patient'])->group(function () {
+    Route::get('/patient', [PatientController::class, 'index']);
+    Route::post('/update-profile', [PatientController::class, 'updateProfile']);
+    Route::get('/patient-prescriptions', [PrescriptionController::class, 'getPatientPrescriptions']);
 });
-

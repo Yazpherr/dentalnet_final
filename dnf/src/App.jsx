@@ -8,6 +8,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PatientPanel from './components/PatientPanel';
 import DoctorPanel from './components/DoctorPanel';
 import AdminPanel from './components/AdminPanel';
+import Home from './views/Home';
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
             <Link to="/register" className="bg-green-500 text-white py-2 px-4 rounded">Register</Link>
           </div>
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/patient" element={
@@ -37,11 +40,7 @@ function App() {
                 <AdminPanel />
               </ProtectedRoute>
             } />
-            <Route path="/" element={
-              <div>
-                <p>Hi</p>
-              </div>
-            } />
+            
           </Routes>
         </div>
       </AuthProvider>

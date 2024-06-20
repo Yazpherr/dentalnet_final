@@ -6,30 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up()
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('dni')->unique();
-            $table->integer('age')->nullable(); // Edad
-            $table->string('gender')->nullable(); // Género
-            $table->string('phone_number')->nullable(); // Número telefónico
-            $table->text('medical_conditions')->nullable(); // Condiciones médicas relevantes
-            $table->integer('oral_health_level')->default(0); // Nivel de salud bucal
+            $table->string('name');
+            $table->string('email');
+            $table->string('phone_number')->nullable();
+            $table->string('gender')->nullable();
+            $table->integer('age')->nullable();
+            $table->text('medical_conditions')->nullable();
+            $table->integer('oral_health_level')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('patients');
     }
 };
-

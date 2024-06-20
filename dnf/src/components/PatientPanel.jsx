@@ -11,10 +11,38 @@ const PatientPanel = () => {
     oral_health_level: 0,
   });
 
+  const [prescriptions, setPrescriptions] = useState([]);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Aquí puedes cargar el perfil del paciente si ya existe.
+    // Cargar perfil del paciente si ya existe
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:8000/api/patient', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setProfile(response.data);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      }
+    };
+
+    // Cargar recetas del paciente
+    const fetchPrescriptions = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('http://localhost:8000/api/patient-prescriptions', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setPrescriptions(response.data.prescriptions);
+      } catch (error) {
+        console.error('Error fetching prescriptions:', error);
+      }
+    };
+
+    fetchProfile();
+    fetchPrescriptions();
   }, []);
 
   const handleChange = (e) => {
@@ -36,8 +64,8 @@ const PatientPanel = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
+      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md mb-6 w-full max-w-md">
         <h2 className="text-2xl mb-4">Update Profile</h2>
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">DNI</label>
@@ -101,6 +129,20 @@ const PatientPanel = () => {
         <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">Update Profile</button>
         {message && <p className="mt-4">{message}</p>}
       </form>
+
+      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h2 className="text-2xl mb-4">Your Prescriptions</h2>
+        {prescriptions.map((prescription) => (
+          <div key={prescription.id} className="bg-white p-4 rounded shadow-md mb-4">
+            <p><strong>Prescription ID:</strong> {prescription.id_prescription}</p>
+            <p><strong>Doctor:</strong> {prescription.name_medic}</p>
+            <p><strong>Drug Name:</strong> {prescription.name_drug}</p>
+            <p><strong>Instructions:</strong> {prescription.instructions_use}</p>
+            <p><strong>Prescription Date:</strong> {new Date(prescription.prescription_date).toLocaleDateString()}</p>
+            <p><strong>Expiration Date:</strong> {new Date(prescription.expiration_date).toLocaleDateString()}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

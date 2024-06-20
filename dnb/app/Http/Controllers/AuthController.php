@@ -1,20 +1,18 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Dentist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
-
-
     public function register(Request $request)
     {
         // Valida la solicitud
@@ -52,75 +50,91 @@ class AuthController extends Controller
         ], 201);
     }
 
+    public function registerDentist(Request $request)
+    {
+        try {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8|confirmed',
+                'dni' => 'required|string|max:20|unique:dentists',
+                'dedication' => 'required|string|max:255',
+            ]);
 
-public function registerDoctor(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8|confirmed',
-    ]);
+            // Crear el usuario en la tabla 'users'
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'doctor',
+            ]);
 
-    $user = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => 'doctor',
-    ]);
+            // Crear el dentista en la tabla 'dentists'
+            $dentist = Dentist::create([
+                'user_id' => $user->id,
+                'dni' => $request->dni,
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $user->password, // Usamos la misma contraseña hasheada
+                'dedication' => $request->dedication,
+            ]);
 
-    return response()->json(['message' => 'Doctor registered successfully'], 201);
-}
-
-
-public function login(Request $request)
-{
-    // Valida la solicitud
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|string|email|max:255',
-        'password' => 'required|string|min:10',
-    ]);
-
-    // Si la validación falla, devuelve una respuesta con los errores
-    if ($validator->fails()) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Validation errors',
-            'errors' => $validator->errors()
-        ], 422);
+            return response()->json(['message' => 'Dentist registered successfully', 'dentist' => $dentist], 201);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to register dentist', 'message' => $e->getMessage()], 500);
+        }
     }
 
-    // Obtiene solo las credenciales de email y password
-    $credentials = $request->only('email', 'password');
+    public function login(Request $request)
+    {
+        // Valida la solicitud
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|string|email|max:255',
+            'password' => 'required|string|min:10',
+        ]);
 
-    try {
-        // Intenta autenticar al usuario y generar un token
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 400);
+        // Si la validación falla, devuelve una respuesta con los errores
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $user = Auth::user(); // Obtener el usuario autenticado
-    } catch (JWTException $e) {
-        // Maneja errores de JWT
-        return response()->json(['error' => 'Could not create token'], 500);
+        // Obtiene solo las credenciales de email y password
+        $credentials = $request->only('email', 'password');
+
+        try {
+            // Intenta autenticar al usuario y generar un token
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return response()->json(['error' => 'Invalid credentials'], 400);
+            }
+
+            $user = Auth::user(); // Obtener el usuario autenticado
+        } catch (JWTException $e) {
+            // Maneja errores de JWT
+            return response()->json(['error' => 'Could not create token'], 500);
+        }
+
+        // Devuelve la respuesta con el token y el usuario
+        return response()->json(compact('token', 'user'));
     }
 
-    // Devuelve la respuesta con el token y el usuario
-    return response()->json(compact('token', 'user'));
-}
-
-public function logout(Request $request)
-{
-    try {
-        Auth::guard('api')->logout();
-        return response()->json(['message' => 'Successfully logged out']);
-    } catch (JWTException $exception) {
-        return response()->json(['error' => 'Failed to log out, please try again.'], 500);
+    public function logout(Request $request)
+    {
+        try {
+            Auth::guard('api')->logout();
+            return response()->json(['message' => 'Successfully logged out']);
+        } catch (JWTException $exception) {
+            return response()->json(['error' => 'Failed to log out, please try again.'], 500);
+        }
     }
-}
 
     public function me()
     {
         return response()->json(Auth::user());
     }
 }
-
