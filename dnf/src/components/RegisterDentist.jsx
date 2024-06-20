@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
 import { FiPlus } from 'react-icons/fi';
+import { getDentists, registerDentist } from '../services/api';
 
 // Establecer el elemento raíz para react-modal
 Modal.setAppElement('#root');
@@ -18,6 +18,21 @@ const RegisterDentist = () => {
 
   const [message, setMessage] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [dentists, setDentists] = useState([]);
+
+  useEffect(() => {
+    const fetchDentists = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await getDentists(token);
+        setDentists(response.data.dentists);
+      } catch (error) {
+        console.error('Failed to fetch dentists:', error);
+      }
+    };
+
+    fetchDentists();
+  }, []);
 
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
@@ -31,11 +46,12 @@ const RegisterDentist = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:8000/api/register-dentist', formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await registerDentist(token, formData);
       setMessage(response.data.message);
       closeModal(); // Cerrar el modal después del registro exitoso
+      // Refrescar la lista de dentistas
+      const newResponse = await getDentists(token);
+      setDentists(newResponse.data.dentists);
     } catch (error) {
       setMessage('Failed to register dentist');
     }
@@ -52,6 +68,27 @@ const RegisterDentist = () => {
           Agregar Dentista
         </button>
       </div>
+
+      <table className="min-w-full bg-white shadow-md rounded-lg">
+        <thead>
+          <tr>
+            <th className="py-2 px-4 border-b">Nombre</th>
+            <th className="py-2 px-4 border-b">Correo Electrónico</th>
+            <th className="py-2 px-4 border-b">DNI</th>
+            <th className="py-2 px-4 border-b">Dedicación</th>
+          </tr>
+        </thead>
+        <tbody>
+          {dentists.map((dentist) => (
+            <tr key={dentist.id}>
+              <td className="py-2 px-4 border-b">{dentist.name}</td>
+              <td className="py-2 px-4 border-b">{dentist.email}</td>
+              <td className="py-2 px-4 border-b">{dentist.dni}</td>
+              <td className="py-2 px-4 border-b">{dentist.dedication}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       <Modal
         isOpen={modalIsOpen}

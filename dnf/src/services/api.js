@@ -29,3 +29,17 @@ export const logout = (token) => {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
+
+// Nueva función para obtener la lista de dentistas
+export const getDentists = (token) => {
+  return axios.get(`${API_URL}/dentists`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// Nueva función para registrar un nuevo dentista
+export const registerDentist = (token, formData) => {
+  return axios.post(`${API_URL}/register-dentist`, formData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
