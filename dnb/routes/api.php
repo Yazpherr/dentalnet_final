@@ -31,9 +31,13 @@ Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::get('/doctor', [DoctorController::class, 'index']);
 });
 
-Route::middleware(['auth:api', 'role:patient'])->group(function () {
-    Route::get('/patient', [PatientController::class, 'index']);
+
+// Grupo de middleware para autenticación
+Route::middleware(['auth:api'])->group(function () {
+    // Ruta para obtener el perfil del paciente (solo para pacientes)
+    Route::middleware('role:patient')->get('/patient', [PatientController::class, 'index']);
+
+    // Ruta para actualizar el perfil del paciente (solo para pacientes)
+    Route::middleware('role:patient')->post('/update-profile', [PatientController::class, 'updateProfile']);
 });
-
-
 

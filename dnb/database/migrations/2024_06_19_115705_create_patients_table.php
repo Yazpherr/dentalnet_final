@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('dni')->unique();
-            $table->string('name');
-            $table->string('email');
-            $table->string('password');
+            $table->integer('age')->nullable(); // Edad
+            $table->string('gender')->nullable(); // Género
+            $table->string('phone_number')->nullable(); // Número telefónico
+            $table->text('medical_conditions')->nullable(); // Condiciones médicas relevantes
+            $table->integer('oral_health_level')->default(0); // Nivel de salud bucal
             $table->timestamps();
         });
     }
@@ -30,3 +32,4 @@ return new class extends Migration
         Schema::dropIfExists('patients');
     }
 };
+
