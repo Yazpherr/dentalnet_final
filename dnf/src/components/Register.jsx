@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import NavBarSoloLogo from '../components/home/NavBarSoloLogo'; // Importar NavBarSoloLogo
 import axios from 'axios';
