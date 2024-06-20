@@ -6,6 +6,7 @@ import 'keen-slider/keen-slider.min.css';
 
 
 //import { NavBar } from '../components/home/NavBar';
+import NavBar from '../components/home/NavBar'; // Importa el componente NavBar
 import HeroSection from '../components/home/HeroSection';
 import StripeOne from '../components/home/StripeOne';
 import ListOfServices from '../components/home/ListOfServices';
@@ -25,8 +26,7 @@ const Home = () => {
 
   return (
     <>
-      {/* <NavBar /> */}
-
+      <NavBar />
       <main className="pb-8">
         {/* Hero */}
         <section id="inicio" className="mt-2">
