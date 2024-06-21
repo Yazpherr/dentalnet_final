@@ -51,5 +51,13 @@ class PatientController extends Controller
     return response()->json(['message' => 'Patient updated successfully', 'patient' => $patient]);
 }
 
+public function getPatients()
+{
+    $patients = Patient::with('user')->get();  // Incluye la relación con el usuario si es necesario
+
+    return response()->json(['patients' => $patients]);
+}
+
+
 
 }
