@@ -1,13 +1,15 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Dentist;
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Dentist;
+use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
@@ -31,23 +33,50 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Crear el usuario con rol por defecto 'patient'
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'patient', // Rol por defecto
-        ]);
+        // Iniciar una transacción
+        DB::beginTransaction();
 
-        // Generar el token
-        $token = JWTAuth::fromUser($user);
+        try {
+            // Crear el usuario
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'role' => 'patient',
+            ]);
 
-        // Devolver la respuesta con el usuario y el token
-        return response()->json([
-            'success' => true,
-            'user' => $user,
-            'token' => $token
-        ], 201);
+            // Crear el paciente con solo el user_id
+            $patient = Patient::create([
+                'user_id' => $user->id,
+                'dni' => null, // Valores iniciales nulos
+                'age' => null,
+                'gender' => null,
+                'phone_number' => null,
+                'medical_conditions' => null,
+                'oral_health_level' => 0,
+            ]);
+
+            // Confirmar la transacción
+            DB::commit();
+
+            // Generar el token
+            $token = JWTAuth::fromUser($user);
+
+            // Devolver la respuesta con el usuario y el token
+            return response()->json([
+                'success' => true,
+                'user' => $user,
+                'token' => $token
+            ], 201);
+        } catch (\Exception $e) {
+            // Revertir la transacción en caso de error
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to register user',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function registerDentist(Request $request)

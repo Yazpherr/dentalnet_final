@@ -11,12 +11,12 @@ class PatientController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'dni' => 'required|string|max:20|unique:patients,dni,' . Auth::id(),
+            'dni' => 'nullable|string|max:20|unique:patients,dni,' . Auth::id(),
             'age' => 'nullable|integer',
             'gender' => 'nullable|string|max:10',
             'phone_number' => 'nullable|string|max:20',
             'medical_conditions' => 'nullable|string',
-            'oral_health_level' => 'integer|min:0|max:100'
+            'oral_health_level' => 'nullable|integer|min:0|max:100'
         ]);
 
         $patient = Patient::updateOrCreate(
@@ -33,4 +33,5 @@ class PatientController extends Controller
 
         return response()->json(['message' => 'Profile updated successfully', 'patient' => $patient]);
     }
+
 }

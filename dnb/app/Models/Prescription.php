@@ -20,7 +20,6 @@ class Prescription extends Model
         'expiration_date',
         'name_drug',
         'instructions_use'
-
     ];
 
     public function doctor()
