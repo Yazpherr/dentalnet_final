@@ -31,6 +31,8 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
 Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::get('/doctor', [DentistController::class, 'index']);
     Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']);
+    Route::post('/doctor/update-patient/{id}', [PatientController::class, 'updatePatientAsDoctor']);
+
 });
 
 // Rutas para pacientes

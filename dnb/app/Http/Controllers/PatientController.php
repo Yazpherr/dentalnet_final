@@ -34,4 +34,22 @@ class PatientController extends Controller
         return response()->json(['message' => 'Profile updated successfully', 'patient' => $patient]);
     }
 
+    public function updatePatientAsDoctor(Request $request, $id)
+{
+    $request->validate([
+        'dni' => 'nullable|string|max:20|unique:patients,dni,' . $id,
+        'age' => 'nullable|integer',
+        'gender' => 'nullable|string|max:10',
+        'phone_number' => 'nullable|string|max:20',
+        'medical_conditions' => 'nullable|string',
+        'oral_health_level' => 'nullable|integer|min:0|max:100'
+    ]);
+
+    $patient = Patient::findOrFail($id);
+    $patient->update($request->all());
+
+    return response()->json(['message' => 'Patient updated successfully', 'patient' => $patient]);
+}
+
+
 }
