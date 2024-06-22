@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getPatientProfile, updatePatientProfile } from '../../services/api';
+import { getPatientProfile, updatePatientProfile } from '../../../services/api';
 
 const PatientDashboard = () => {
   const [profile, setProfile] = useState({

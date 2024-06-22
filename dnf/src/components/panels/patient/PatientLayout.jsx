@@ -1,8 +1,8 @@
 // src/components/microcomponents/PatientLayout.jsx
 
 import React from 'react';
-import SidebarLarge from './SidebarLarge';
-import SidebarResponsive from './SidebarResponsive';
+import SidebarLarge from '../../microcomponents/SidebarLarge';
+import SidebarResponsive from '../../microcomponents/SidebarResponsive';
 import { FiHome, FiClipboard } from 'react-icons/fi';
 
 const PatientLayout = ({ children }) => {

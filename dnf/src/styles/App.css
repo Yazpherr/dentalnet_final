@@ -3,66 +3,49 @@
 @tailwind components;
 @tailwind utilities;
 
-.modal-overlay {
-    background: rgba(0, 0, 0, 0.5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal {
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    max-width: 500px;
-    width: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.site-layout-background {
+  background: #fff;
 }
 
 .custom-login-button {
-    background-color: #003399 !important;
-    border-color: #003399 !important;
+  background-color: #003399 !important;
+  border-color: #003399 !important;
 }
 
 .custom-login-button:hover {
-    background-color: #002266 !important; /* Cambia el color en hover si lo deseas */
-    border-color: #002266 !important;
+  background-color: #002266 !important; /* Cambia el color en hover si lo deseas */
+  border-color: #002266 !important;
 }
 
 .custom-input {
-    height: 40px; /* Ajusta la altura según sea necesario */
+  height: 40px; /* Ajusta la altura según sea necesario */
 }
 
 /* Más específico y con !important para asegurar que se aplique */
 .ant-form-item-label > label.ant-form-item-required::before {
-    display: none !important;
+  display: none !important;
 }
 
 .custom-label {
-    font-weight: 600; /* Semibold */
+  font-weight: 600; /* Semibold */
 }
 
 /* Estilo para el contenedor del mensaje de error */
 .error-container {
-    height: 20px; /* Altura fija para el espacio del mensaje de error */
-    margin-bottom: 15px; /* Margen inferior para espacio entre el mensaje de error y el botón */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  height: 40px; /* Altura fija para el espacio del mensaje de error */
+  margin-bottom: 15px; /* Margen inferior para espacio entre el mensaje de error y el botón */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .error-message {
-    color: #ff4d4f; /* Color del mensaje de error */
-    background-color: #fff1f0; /* Fondo del mensaje de error */
-    border-left: 5px solid #ff4d4f; /* Barra roja en el borde izquierdo */
-    padding: 10px 20px;
-    width: 100%;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    margin: 0; /* Para evitar márgenes adicionales */
+  color: #ff4d4f; /* Color del mensaje de error */
+  background-color: #fff1f0; /* Fondo del mensaje de error */
+  border-left: 5px solid #ff4d4f; /* Barra roja en el borde izquierdo */
+  padding: 10px 20px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 0; /* Para evitar márgenes adicionales */
 }

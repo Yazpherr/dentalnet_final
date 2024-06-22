@@ -43,3 +43,10 @@ export const registerDentist = (token, formData) => {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
+
+export const getPatients = (token) => {
+  return axios.get('/patients', {
+    headers: {
+      Authorization: `Bearer ${token}` },
+  });
+};

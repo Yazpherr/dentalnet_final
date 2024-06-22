@@ -1,40 +1,59 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { getDentists } from "../../../services/api";
+import { useState, useEffect } from 'react';
+import { Card, Col, Row, Spin, message } from 'antd';
+import { getDentists, getPatients } from '../../../services/api';
 
 const AdminPanel = () => {
   const [dentistCount, setDentistCount] = useState(0);
+  const [patientCount, setPatientCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDentists = async () => {
+    const fetchCounts = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await getDentists(token);
-        setDentistCount(response.data.dentists.length);
+        const token = localStorage.getItem('token');
+
+        // Fetch dentists count
+        const dentistResponse = await getDentists(token);
+        setDentistCount(dentistResponse.data.dentists.length);
+
+        // Fetch patients count
+        const patientResponse = await getPatients(token);
+        setPatientCount(patientResponse.data.patients.length);
+        
       } catch (error) {
-        console.error("Failed to fetch dentists:", error);
+        message.error('Error al cargar los datos');
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchDentists();
+    fetchCounts();
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Total de Doctores</h3>
-          <p className="text-3xl">{dentistCount}</p>
-        </div>
-        <div className="bg-white p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Tarjeta 2</h3>
-          <p className="text-3xl">Contenido</p>
-        </div>
-        <div className="bg-white p-6 rounded shadow-md">
-          <h3 className="text-xl font-bold mb-4">Tarjeta 3</h3>
-          <p className="text-3xl">Contenido</p>
-        </div>
-      </div>
+      <Spin spinning={loading} size="large">
+        <Row gutter={[16, 16]} className="w-full">
+          <Col xs={24} md={8}>
+            <Card className="shadow-md rounded-lg">
+              <h3 className="text-xl font-bold mb-4">Total de Doctores</h3>
+              <p className="text-3xl">{dentistCount}</p>
+            </Card>
+          </Col>
+          <Col xs={24} md={8}>
+            <Card className="shadow-md rounded-lg">
+              <h3 className="text-xl font-bold mb-4">Total de Pacientes</h3>
+              <p className="text-3xl">{patientCount}</p>
+            </Card>
+          </Col>
+          <Col xs={24} md={8}>
+            <Card className="shadow-md rounded-lg">
+              <h3 className="text-xl font-bold mb-4">Tarjeta 3</h3>
+              <p className="text-3xl">Contenido</p>
+            </Card>
+          </Col>
+        </Row>
+      </Spin>
     </div>
   );
 };
