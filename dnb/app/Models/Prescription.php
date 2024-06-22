@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +18,8 @@ class Prescription extends Model
         'creation_date',
         'expiration_date',
         'name_drug',
-        'instructions_use'
+        'instructions_use',
+        'dni' // Añadir este campo
     ];
 
     public function doctor()

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { getDentists } from '../services/api';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { getDentists } from "../services/api";
 
 const AdminPanel = () => {
   const [dentistCount, setDentistCount] = useState(0);
@@ -8,11 +8,11 @@ const AdminPanel = () => {
   useEffect(() => {
     const fetchDentists = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         const response = await getDentists(token);
         setDentistCount(response.data.dentists.length);
       } catch (error) {
-        console.error('Failed to fetch dentists:', error);
+        console.error("Failed to fetch dentists:", error);
       }
     };
 

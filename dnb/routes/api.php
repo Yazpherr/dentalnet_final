@@ -25,20 +25,26 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'index']);
     Route::post('/register-dentist', [AuthController::class, 'registerDentist']);
     Route::get('/dentists', [AdminController::class, 'getDentists']);
+    Route::get('/patients', [PatientController::class, 'getPatients']);
+
 });
 
 // Rutas para doctores
 Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::get('/doctor', [DentistController::class, 'index']);
-    Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']);
-    Route::post('/doctor/update-patient/{id}', [PatientController::class, 'updatePatientAsDoctor']);
-    Route::get('/doctor/patients', [PatientController::class, 'getPatients']);
-    
+    Route::get('/doctor/patients', [PatientController::class, 'getPatients']);  // lista de pacientes
+    Route::post('/doctor/update-patient/{id}', [PatientController::class, 'updatePatientAsDoctor']); // modificar paciente del lado del doctor
+    // modulos recetas
+    Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']); // crear receta
+    Route::get('/doctor/prescriptions', [PrescriptionController::class, 'getAllPrescriptions']); // obtener todas las recetas
+
 });
 
 // Rutas para pacientes
 Route::middleware(['auth:api', 'role:patient'])->group(function () {
     Route::get('/patient', [PatientController::class, 'index']);
     Route::post('/update-profile', [PatientController::class, 'updateProfile']);
-    Route::get('/patient-prescriptions', [PrescriptionController::class, 'getPatientPrescriptions']);
+    Route::get('/patient/prescriptions', [PrescriptionController::class, 'getPatientPrescriptions']);
+
 });
+

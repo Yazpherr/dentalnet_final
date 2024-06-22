@@ -1,33 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
-import { FiPlus } from 'react-icons/fi';
-import { getDentists, registerDentist } from '../services/api';
+import React, { useState, useEffect } from "react";
+import Modal from "react-modal";
+import { FiPlus } from "react-icons/fi";
+import { getDentists, registerDentist } from "../services/api";
 
 // Establecer el elemento raíz para react-modal
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 const RegisterDentist = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    dni: '',
-    dedication: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+    dni: "",
+    dedication: "",
   });
 
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [dentists, setDentists] = useState([]);
 
+  const [isLoadingData, setIsLoadingData] = useState(false);
+
   useEffect(() => {
+    setIsLoadingData(true);
+
     const fetchDentists = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         const response = await getDentists(token);
         setDentists(response.data.dentists);
+        setIsLoadingData(false);
       } catch (error) {
-        console.error('Failed to fetch dentists:', error);
+        setIsLoadingData(false);
+        console.error("Failed to fetch dentists:", error);
       }
     };
 
@@ -45,7 +51,7 @@ const RegisterDentist = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const response = await registerDentist(token, formData);
       setMessage(response.data.message);
       closeModal(); // Cerrar el modal después del registro exitoso
@@ -53,7 +59,7 @@ const RegisterDentist = () => {
       const newResponse = await getDentists(token);
       setDentists(newResponse.data.dentists);
     } catch (error) {
-      setMessage('Failed to register dentist');
+      setMessage("Failed to register dentist");
     }
   };
 
@@ -68,6 +74,8 @@ const RegisterDentist = () => {
           Agregar Dentista
         </button>
       </div>
+
+      {isLoadingData ? "cargando..." : "ya cargue"}
 
       <table className="min-w-full bg-white shadow-md rounded-lg">
         <thead>
@@ -98,7 +106,10 @@ const RegisterDentist = () => {
         overlayClassName="modal-overlay"
       >
         <h2 className="text-2xl mb-4">Registrar Dentista</h2>
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded shadow-md"
+        >
           <div className="mb-4">
             <label className="block text-sm font-bold mb-2">Nombre</label>
             <input
@@ -111,7 +122,9 @@ const RegisterDentist = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Correo Electrónico</label>
+            <label className="block text-sm font-bold mb-2">
+              Correo Electrónico
+            </label>
             <input
               type="email"
               name="email"
@@ -133,7 +146,9 @@ const RegisterDentist = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-bold mb-2">Confirmar Contraseña</label>
+            <label className="block text-sm font-bold mb-2">
+              Confirmar Contraseña
+            </label>
             <input
               type="password"
               name="password_confirmation"
@@ -165,12 +180,18 @@ const RegisterDentist = () => {
               required
             />
           </div>
-          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          <button
+            type="submit"
+            className="bg-blue-500 text-white py-2 px-4 rounded"
+          >
             Registrar Dentista
           </button>
         </form>
         {message && <p className="mt-4">{message}</p>}
-        <button onClick={closeModal} className="mt-4 text-gray-500 hover:text-gray-800">
+        <button
+          onClick={closeModal}
+          className="mt-4 text-gray-500 hover:text-gray-800"
+        >
           Cerrar
         </button>
       </Modal>

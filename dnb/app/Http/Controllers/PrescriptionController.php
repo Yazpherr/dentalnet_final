@@ -47,7 +47,7 @@ class PrescriptionController extends Controller
             $prescription = Prescription::create([
                 'doctor_id' => $doctor->id, // Asignar el doctor_id del registro en dentists
                 'patient_id' => $patient->id,
-                'dni' => $request->dni,
+                'dni' => $request->dni, // Añadir el campo dni
                 'id_prescription' => $request->id_prescription,
                 'prescription_date' => $request->prescription_date,
                 'name_patient' => $user->name,
@@ -55,7 +55,7 @@ class PrescriptionController extends Controller
                 'creation_date' => now(),
                 'expiration_date' => $request->expiration_date,
                 'name_drug' => $request->name_drug,
-                'instructions_use' => $request->instructions_use
+                'instructions_use' => $request->instructions_use,
             ]);
 
             return response()->json(['message' => 'Prescription created successfully', 'prescription' => $prescription], 201);
@@ -65,10 +65,36 @@ class PrescriptionController extends Controller
             return response()->json(['error' => 'Failed to create prescription', 'message' => $e->getMessage()], 500);
         }
     }
-
+    public function getAllPrescriptions()
+    {
+            try {
+                $prescriptions = Prescription::with('doctor', 'patient')->get();
+                return response()->json(['prescriptions' => $prescriptions], 200);
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to fetch prescriptions', 'message' => $e->getMessage()], 500);
+            }
+    }
     public function getPatientPrescriptions()
     {
-        $prescriptions = Prescription::where('patient_id', Auth::id())->get();
-        return response()->json(['prescriptions' => $prescriptions]);
+        try {
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+
+            // Buscar el paciente relacionado con el usuario autenticado
+            $patient = Patient::where('user_id', $user->id)->first();
+
+            if (!$patient) {
+                return response()->json(['error' => 'Patient not found'], 404);
+            }
+
+            // Obtener las recetas del paciente
+            $prescriptions = Prescription::where('patient_id', $patient->id)->with('doctor')->get();
+
+            return response()->json(['prescriptions' => $prescriptions], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch prescriptions', 'message' => $e->getMessage()], 500);
+        }
     }
+
+
 }
