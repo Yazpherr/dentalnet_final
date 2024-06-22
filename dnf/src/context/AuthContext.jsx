@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getProfile } from '../services/api';
+import LoadingSpinner from '../components/UI/LoadingSpinner';
 
 export const AuthContext = createContext();
 
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // O un spinner de carga
+    return <LoadingSpinner />;
   }
 
   const login = (userData) => {
