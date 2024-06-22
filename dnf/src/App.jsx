@@ -3,7 +3,7 @@ import "./styles/App.css";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import { AuthProvider } from "./context/AuthContext";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 import PatientPanel from "./components/panels/patient/PatientPanel";
 import DoctorPanel from "./components/panels/dentist/DoctorPanel";

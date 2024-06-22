@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,9 +20,16 @@ export const AuthProvider = ({ children }) => {
           localStorage.removeItem('token');
           setUser(null);
           navigate('/login');
-        });
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>; // O un spinner de carga
+  }
 
   const login = (userData) => {
     setUser(userData);
