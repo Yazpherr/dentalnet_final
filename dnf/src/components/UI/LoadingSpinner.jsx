@@ -1,10 +1,15 @@
 // src/components/UI/LoadingSpinner.jsx
 
-import { Spin } from 'antd';
+
+import LogoIcon from '../../assets/icons/secureTooth';
+import './LoadinSpinner.css';
 
 const LoadingSpinner = () => (
-  <div className="flex justify-center items-center min-h-screen">
-    <Spin size="large" />
+  <div className="loading-spinner-container">
+    <div className="loading-spinner">
+      <LogoIcon className="logo-icon" />
+      <div className="spinner-circle"></div>
+    </div>
   </div>
 );
 
