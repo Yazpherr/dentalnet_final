@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getDentists } from "../services/api";
+import { getDentists } from "../../../services/api";
 
 const AdminPanel = () => {
   const [dentistCount, setDentistCount] = useState(0);

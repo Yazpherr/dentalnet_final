@@ -1,15 +1,17 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
+import './styles/App.css';
 import Login from './views/Login';
-import Register from './components/Register';
+import Register from './views/Register';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import PatientPanel from './components/PatientPanel';
-import DoctorPanel from './components/DoctorPanel';
+
+import PatientPanel from './components/panels/patient/PatientPanel';
+import DoctorPanel from './components/panels/dentist/DoctorPanel';
+import AdminPanel from './components/panels/admin/AdminPanel';
+
 import Home from './views/Home';
 import AdminLayout from './components/microcomponents/AdminLayout';
 import RegisterDentist from './components/RegisterDentist';
-import AdminPanel from './components/AdminPanel';
 
 function App() {
   return (
