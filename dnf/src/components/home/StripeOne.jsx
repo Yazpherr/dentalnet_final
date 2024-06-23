@@ -13,14 +13,14 @@ function StripeOne() {
           <div className="w-full md:w-1/3 text-white text-center  mr-8 md:text-left mb-8 md:mb-0">
             <h1
               className="text-4xl font-bold text-center "
-              data-aos-delay="100"
+              data-aos-delay="50"
               data-aos="fade-up"
             >
               ¿Qué ofrece nuestra web?
             </h1>
             <p
               className="mt-4 text-lg text-center"
-              data-aos-delay="100"
+              data-aos-delay="50"
               data-aos="fade-up"
             >
               Tenemos los siguientes servicios para ti
@@ -32,7 +32,7 @@ function StripeOne() {
             {/* Carta 1 */}
             <div
               className="w-full md:w-1/4 p-2 md:p-4"
-              data-aos-delay="200"
+              data-aos-delay="100"
               data-aos="fade-up"
             >
               <div className="bg-white rounded-lg shadow-lg p-4 ">

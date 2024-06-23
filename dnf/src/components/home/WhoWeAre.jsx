@@ -1,10 +1,18 @@
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 function WhoWeAre() {
+  useEffect(() => {
+    AOS.init({ duration: 500 });
+  }, []);
+
   return (
     <section className="py-20 bg-gray-100">
       <div className="container mx-auto px-4 max-w-screen-xl flex items-center">
         <div className="flex flex-col md:flex-row">
           {/* Columna Derecha */}
-          <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-4 justify-center">
+          <div className="w-full md:w-1/2 mt-8 md:mt-0 md:pl-4 justify-center" data-aos="fade-up">
             <h2 className="text-5xl font-bold mb-4">Quienes somos</h2>
             <img
               src="/imgLanding/WhoWeAre.png"
@@ -14,7 +22,7 @@ function WhoWeAre() {
           </div>
 
           {/* Columna Izquierda */}
-          <div className="w-full md:w-1/2 md:pr-4">
+          <div className="w-full md:w-1/2 md:pr-4" data-aos="fade-up">
             <h2 className="text-3xl font-bold mb-4 text-right">
               Nuestra gloriosa <br /> <span className="text-5xl">historia</span>
             </h2>

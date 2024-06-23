@@ -1,4 +1,16 @@
-function MainFeatures() {
+import { useEffect } from 'react';
+import { Card, Row, Col } from 'antd';
+import { SmileOutlined, HeartOutlined, SafetyOutlined, MedicineBoxOutlined, ClockCircleOutlined, UserOutlined } from '@ant-design/icons';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+const { Meta } = Card;
+
+const MainFeatures = () => {
+  useEffect(() => {
+    AOS.init({ duration: 500 }); // Medio segundo de duración
+  }, []);
+
   return (
     <section className="bg-gray-100 py-20">
       <div className="container mx-auto max-w-screen-xl px-4">
@@ -6,52 +18,102 @@ function MainFeatures() {
           {/* Título Dividido en Dos Columnas */}
           <div className="w-full md:w-1/2">
             <div className="md:flex md:space-x-4">
-              <p className="text-lg md:w-1/2">¿Qué nos hace especiales?</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-2 text-center md:text-left md:w-1/2">¿Qué nos hace especiales?</h2>
             </div>
           </div>
 
-          <p className="text-lg md:w-1/2 text-right">
-            Caracteristicas principales
-          </p>
+          <h2 className="text-4xl font-bold md:w-1/2 text-right">
+            Características principales
+          </h2>
         </div>
 
         {/* Seis Tarjetas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Row gutter={[16, 16]} justify="center">
           {/* Tarjeta 1 */}
-          <div className="bg-gray-200 rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tecnologia Laser</h3>
-            <p className="text-gray-700">
-              Nuestro centro dental cuenta con la tecnología láser más avanzada
-              del mercado, lo que nos permite ofrecer tratamientos precisos y
-              eficaces para su boca.
-            </p>
-          </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <SmileOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Tecnología Láser</h1>}
+                description="Nuestro centro dental cuenta con la tecnología láser más avanzada del mercado, lo que nos permite ofrecer tratamientos precisos y eficaces para su boca."
+              />
+            </Card>
+          </Col>
           {/* Tarjeta 2 */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tarjeta 2</h3>
-            <p className="text-gray-700">Contenido de la tarjeta 2.</p>
-          </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <HeartOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Cuidado Integral</h1>}
+                description="Ofrecemos un cuidado dental integral que abarca desde la prevención hasta los tratamientos más avanzados."
+              />
+            </Card>
+          </Col>
           {/* Tarjeta 3 */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tarjeta 3</h3>
-            <p className="text-gray-700">Contenido de la tarjeta 3.</p>
-          </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <SafetyOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Seguridad</h1>}
+                description="Garantizamos los más altos estándares de seguridad e higiene en todos nuestros procedimientos."
+              />
+            </Card>
+          </Col>
           {/* Tarjeta 4 */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tarjeta 4</h3>
-            <p className="text-gray-700">Contenido de la tarjeta 4.</p>
-          </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <MedicineBoxOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Tratamientos Especializados</h1>}
+                description="Contamos con un equipo de especialistas en todas las áreas de la odontología para brindarte el mejor tratamiento."
+              />
+            </Card>
+          </Col>
           {/* Tarjeta 5 */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tarjeta 5</h3>
-            <p className="text-gray-700">Contenido de la tarjeta 5.</p>
-          </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <ClockCircleOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Horarios Flexibles</h1>}
+                description="Ofrecemos horarios flexibles para que puedas agendar tus citas en el momento que más te convenga."
+              />
+            </Card>
+          </Col>
           {/* Tarjeta 6 */}
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold mb-2">Tarjeta 6</h3>
-            <p className="text-gray-700">Contenido de la tarjeta 6.</p>
-          </div>
-        </div>
+          <Col xs={24} md={12} lg={8}>
+            <Card
+              data-aos="fade-up"
+              className="rounded-lg shadow-lg h-full flex flex-col justify-center items-center text-center"
+              style={{ height: '100%' }}
+            >
+              <UserOutlined style={{ fontSize: '3rem', color: '#003399', marginBottom: '1rem' }} />
+              <Meta
+                title={<h1 className="text-xl font-bold">Atención Personalizada</h1>}
+                description="Nos enfocamos en brindar una atención personalizada a cada uno de nuestros pacientes, asegurándonos de satisfacer todas sus necesidades."
+              />
+            </Card>
+          </Col>
+        </Row>
       </div>
     </section>
   );

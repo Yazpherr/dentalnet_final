@@ -1,8 +1,16 @@
+import { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 function StripeTwo() {
+  useEffect(() => {
+    AOS.init({ duration: 500 });
+  }, []);
+
   return (
     <section className="bg-primaryBlue py-20 font-ubuntu">
       <div className="container mx-auto max-w-screen-xl px-4">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center" data-aos="fade-up">
           <h2 className="text-4xl mb-4 text-white text-center">
             ¡iluminaremos <span className="font-bold">tu sonrisa!</span>
           </h2>
@@ -12,13 +20,12 @@ function StripeTwo() {
             alcanzar una salud mental óptima y una sonrisa radiante. Durante más
             de 30 años, nos hemos esforzado por ser la opción más confiable para
             nuestros clientes, utilizando un enfoque personalizado que se adapte
-            a sus necesidades específicas
+            a sus necesidades específicas.
           </p>
 
           <button className="px-8 py-3 border border-white text-white rounded-md hover:bg-blue-800 transition duration-300 ease-in-out">
             Ingresa ahora
           </button>
-
         </div>
       </div>
     </section>

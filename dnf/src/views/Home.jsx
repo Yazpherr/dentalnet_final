@@ -15,8 +15,7 @@ import StripeTwo from '../components/home/StripeTwo';
 import WhoWeAre from '../components/home/WhoWeAre';
 import OurDoctors from '../components/home/DoctorsSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
-import Form from '../components/home/Form';
-import NewsLetterForm from '../components/home/NewsLetterForm';
+
 import Footer from '../components/home/Footer';
 
 const Home = () => {
@@ -69,15 +68,8 @@ const Home = () => {
           <TestimonialsSection />
         </section>
 
-        {/* Formulario de contacto */}
-        <section className="bg-white px-6" id="modulos">
-          <Form />
-        </section>
 
-        {/* Formulario de contacto */}
-        <section className="bg-white px-6" id="modulos">
-          <NewsLetterForm />
-        </section>
+
       </main>
 
       {/* Footer */}
