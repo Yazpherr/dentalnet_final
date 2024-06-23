@@ -7,20 +7,21 @@ import Register from "./views/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-
 import PatientPanel from "./components/panels/patient/PatientPanel";
-import DoctorPanel from "./components/panels/dentist/DoctorPanel";
+import DoctorPanel from "./components/panels/dentist/DentistPanel";
 import AdminPanel from "./components/panels/admin/AdminPanel";
+import DentistLayout from "./components/panels/dentist/DentistLayout";
 
 import Home from "./views/Home";
 import AdminLayout from "./components/panels/admin/AdminLayout";
 import RegisterDentist from "./components/panels/admin/RegisterDentist";
+import Patients from "./components/panels/dentist/Patients";
+import Prescriptions from "./components/panels/dentist/Prescriptions";
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
@@ -37,10 +38,14 @@ function App() {
             path="/doctor"
             element={
               <ProtectedRoute roles={["doctor"]}>
-                <DoctorPanel />
+                <DentistLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<DoctorPanel />} />
+            <Route path="patients" element={<Patients />} />
+            <Route path="prescriptions" element={<Prescriptions />} />
+          </Route>
           <Route
             path="/admin"
             element={
