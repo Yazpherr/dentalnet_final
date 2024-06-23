@@ -49,40 +49,38 @@ class PatientController extends Controller
     $patient->update($request->all());
 
     return response()->json(['message' => 'Patient updated successfully', 'patient' => $patient]);
-}
+    }
 
-// En PatientController.php
-public function getProfile()
-{
-    try {
-        $patient = Patient::with('user')->where('user_id', Auth::id())->first();
-        if (!$patient) {
-            return response()->json(['error' => 'Patient not found'], 404);
+    // En PatientController.php
+    public function getProfile()
+    {
+        try {
+            $patient = Patient::with('user')->where('user_id', Auth::id())->first();
+            if (!$patient) {
+                return response()->json(['error' => 'Patient not found'], 404);
+            }
+            return response()->json(['patient' => $patient], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch profile', 'message' => $e->getMessage()], 500);
         }
-        return response()->json(['patient' => $patient], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to fetch profile', 'message' => $e->getMessage()], 500);
     }
-}
 
-public function getPatients()
-{
-    $patients = Patient::with('user')->get();  // Incluye la relación con el usuario si es necesario
+    public function getPatients()
+    {
+        $patients = Patient::with('user')->get();  // Incluye la relación con el usuario si es necesario
 
-    return response()->json(['patients' => $patients]);
-}
-
-public function getPatientsForAdmin()
-{
-    try {
-        $patients = Patient::with('user')->get();
-        return response()->json(['patients' => $patients], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Failed to fetch patients', 'message' => $e->getMessage()], 500);
+        return response()->json(['patients' => $patients]);
     }
-}
 
-
+    public function getPatientsForAdmin()
+    {
+        try {
+            $patients = Patient::with('user')->get();
+            return response()->json(['patients' => $patients], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to fetch patients', 'message' => $e->getMessage()], 500);
+        }
+    }
 
 
 }
