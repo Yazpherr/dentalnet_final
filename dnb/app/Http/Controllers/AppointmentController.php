@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Patient;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -89,6 +90,7 @@ class AppointmentController extends Controller
         $validator = Validator::make($request->all(), [
             'schedule_id' => 'required|exists:schedules,id',
             'reason' => 'required|string|max:255',
+            'patient_id' => 'required|exists:patients,id',
         ]);
 
         if ($validator->fails()) {
@@ -97,20 +99,78 @@ class AppointmentController extends Controller
 
         try {
             $schedule = Schedule::findOrFail($request->schedule_id);
+
+            if ($schedule->status !== 'available') {
+                return response()->json(['error' => 'Schedule is not available'], 400);
+            }
+
+            // Aquí convertimos 'day' a una fecha válida
+            $date = $this->convertDayToDate($schedule->day);
+
+            // Actualizamos el estado del schedule a unavailable
             $schedule->status = 'unavailable';
             $schedule->save();
 
+            // Creamos la cita
             $appointment = Appointment::create([
                 'doctor_id' => $schedule->doctor_id,
-                'patient_id' => auth()->user()->id, // Suponiendo que el paciente está autenticado
+                'patient_id' => $request->patient_id,
                 'schedule_id' => $request->schedule_id,
-                'date' => $schedule->day,
+                'date' => $date, // Usamos la fecha convertida
                 'reason' => $request->reason,
             ]);
 
             return response()->json($appointment, 201);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return response()->json(['error' => 'Database error: ' . $e->getMessage()], 500);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error booking appointment'], 500);
+            return response()->json(['error' => 'General error: ' . $e->getMessage()], 500);
         }
     }
+
+    // Función para convertir el nombre del día a una fecha válida
+    private function convertDayToDate($dayOfWeek)
+    {
+        $daysOfWeek = [
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+        ];
+
+        if (!isset($daysOfWeek[$dayOfWeek])) {
+            throw new \Exception("Invalid day of week: $dayOfWeek");
+        }
+
+        $dayOfWeekNumber = $daysOfWeek[$dayOfWeek];
+        $currentDayOfWeekNumber = date('N'); // 1 (for Monday) through 7 (for Sunday)
+        $daysUntilNext = ($dayOfWeekNumber - $currentDayOfWeekNumber + 7) % 7;
+        $daysUntilNext = $daysUntilNext === 0 ? 7 : $daysUntilNext;
+
+        return date('Y-m-d', strtotime("+$daysUntilNext days"));
+    }
+
+
+    // Método para obtener las citas del paciente autenticado
+    public function getPatientAppointments()
+    {
+        try {
+            $userId = auth()->user()->id; // Obtiene el ID del usuario autenticado
+            $patient = Patient::where('user_id', $userId)->first(); // Obtiene el paciente asociado al usuario
+
+            if (!$patient) {
+                return response()->json(['error' => 'Patient not found'], 404);
+            }
+
+            $appointments = Appointment::where('patient_id', $patient->id)->get(); // Obtiene las citas del paciente
+            return response()->json($appointments, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error fetching patient appointments'], 500);
+        }
+    }
+
+
+
+
 }
