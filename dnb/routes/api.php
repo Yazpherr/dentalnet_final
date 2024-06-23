@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DentistController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -13,12 +15,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->get('me', [AuthController::class, 'me']);
 Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']); // Ruta para logout
-
 
 // Rutas para administradores
 Route::middleware(['auth:api', 'role:admin'])->group(function () {
@@ -38,6 +38,15 @@ Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']); // crear receta
     Route::get('/doctor/prescriptions', [PrescriptionController::class, 'getAllPrescriptions']); // obtener todas las recetas
 
+    // Rutas para horarios y citas
+    Route::get('/schedules', [ScheduleController::class, 'index']);
+    Route::post('/schedules', [ScheduleController::class, 'store']);
+    Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
+    Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+    Route::get('/appointments', [AppointmentController::class, 'index']);
+    Route::post('/appointments', [AppointmentController::class, 'store']);
+    Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
+    Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
 });
 
 // Rutas para pacientes
@@ -47,4 +56,3 @@ Route::middleware(['auth:api', 'role:patient'])->group(function () {
     Route::get('/patient/prescriptions', [PrescriptionController::class, 'getPatientPrescriptions']);
     Route::get('/patient/profile', [PatientController::class, 'getProfile']);  // Nueva ruta para obtener el perfil del pacientes
 });
-
