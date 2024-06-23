@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -68,6 +69,48 @@ class AppointmentController extends Controller
             return response()->json(null, 204);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error deleting appointment'], 500);
+        }
+    }
+
+    // Método para obtener los slots disponibles
+    public function getAvailableSchedules()
+    {
+        try {
+            $schedules = Schedule::where('status', 'available')->get();
+            return response()->json($schedules, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error fetching available schedules'], 500);
+        }
+    }
+
+    // Método para reservar una cita
+    public function bookAppointment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'schedule_id' => 'required|exists:schedules,id',
+            'reason' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        try {
+            $schedule = Schedule::findOrFail($request->schedule_id);
+            $schedule->status = 'unavailable';
+            $schedule->save();
+
+            $appointment = Appointment::create([
+                'doctor_id' => $schedule->doctor_id,
+                'patient_id' => auth()->user()->id, // Suponiendo que el paciente está autenticado
+                'schedule_id' => $request->schedule_id,
+                'date' => $schedule->day,
+                'reason' => $request->reason,
+            ]);
+
+            return response()->json($appointment, 201);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error booking appointment'], 500);
         }
     }
 }

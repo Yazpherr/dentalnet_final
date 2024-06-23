@@ -72,4 +72,15 @@ class ScheduleController extends Controller
             return response()->json(['error' => 'Error deleting schedule'], 500);
         }
     }
+
+    public function getAvailableSchedules()
+{
+    try {
+        $schedules = Schedule::where('status', 'available')->get();
+        return response()->json($schedules, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error fetching available schedules'], 500);
+    }
+}
+
 }

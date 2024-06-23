@@ -55,4 +55,11 @@ Route::middleware(['auth:api', 'role:patient'])->group(function () {
     Route::post('/update-profile', [PatientController::class, 'updateProfile']);
     Route::get('/patient/prescriptions', [PrescriptionController::class, 'getPatientPrescriptions']);
     Route::get('/patient/profile', [PatientController::class, 'getProfile']);  // Nueva ruta para obtener el perfil del pacientes
+// citas medicas
+    Route::get('/available-schedules', [ScheduleController::class, 'getAvailableSchedules']);
+    Route::post('/book-appointment', [AppointmentController::class, 'bookAppointment']);
+
+
+
 });
+
