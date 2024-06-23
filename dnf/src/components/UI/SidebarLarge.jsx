@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi';
 import { Layout, Menu } from 'antd';
-import HomeIcon from '../../assets/icons/HomeIcon'; // Importar el nuevo icono
-import AddDentistIcon from '../../assets/icons/AddDentistIcon'; // Importar el icono de AddDentist
 import PropTypes from 'prop-types';
+
+// Importar los íconos necesarios
+import { UserOutlined, CalendarOutlined, FileOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
 
@@ -11,9 +12,15 @@ const SidebarLarge = ({ menuItems }) => {
   const location = useLocation();
 
   // Mapear menuItems a la estructura que requiere Ant Design
+  const iconMap = {
+    user: <UserOutlined />,
+    calendar: <CalendarOutlined />,
+    file: <FileOutlined />,
+  };
+
   const menuItemsAntD = menuItems.map((item) => ({
     key: item.path,
-    icon: item.path === '/admin' ? <HomeIcon className="w-5 h-5 mr-2" /> : item.path === '/register-dentist' ? <AddDentistIcon className="w-5 h-5 mr-2" /> : <item.icon className="w-5 h-5 mr-2" />,
+    icon: iconMap[item.icon],
     label: <Link to={item.path}>{item.name}</Link>,
   }));
 
@@ -26,12 +33,10 @@ const SidebarLarge = ({ menuItems }) => {
         <Menu
           mode="inline"
           selectedKeys={[location.pathname]}
-          items={menuItemsAntD} // Usar items en lugar de children
+          items={menuItemsAntD}
           style={{ borderRight: 0 }}
         />
       </div>
-
-      {/* Boton de cerrar sesion */}
       <div className="p-4 mt-auto">
         <button
           className="w-full bg-red-600 text-white py-2 px-4 rounded flex items-center justify-center"
@@ -53,7 +58,7 @@ SidebarLarge.propTypes = {
     PropTypes.shape({
       path: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: PropTypes.elementType.isRequired,
+      icon: PropTypes.oneOf(['user', 'calendar', 'file']).isRequired,
     })
   ).isRequired,
 };

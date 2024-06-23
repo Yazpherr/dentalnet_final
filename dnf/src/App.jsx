@@ -7,7 +7,10 @@ import Register from "./views/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
-import PatientPanel from "./components/panels/patient/PatientPanel";
+import PatientLayout from "./components/panels/patient/PatientLayout";
+import PatientDashboard from "./components/panels/patient/PatientDashboard";
+import PatientPrescriptions from "./components/panels/patient/PatientPrescriptions";
+
 import DoctorPanel from "./components/panels/dentist/DentistPanel";
 import AdminPanel from "./components/panels/admin/AdminPanel";
 import DentistLayout from "./components/panels/dentist/DentistLayout";
@@ -30,10 +33,13 @@ function App() {
             path="/patient"
             element={
               <ProtectedRoute roles={["patient"]}>
-                <PatientPanel />
+                <PatientLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route path="dashboard" element={<PatientDashboard />} />
+            <Route path="prescriptions" element={<PatientPrescriptions />} />
+          </Route>
           <Route
             path="/doctor"
             element={
@@ -56,7 +62,6 @@ function App() {
           >
             <Route index element={<AdminPanel />} />
             <Route path="register-dentist" element={<RegisterDentist />} />
-            {/* Puedes agregar más rutas dentro del admin aquí */}
           </Route>
         </Routes>
       </AuthProvider>

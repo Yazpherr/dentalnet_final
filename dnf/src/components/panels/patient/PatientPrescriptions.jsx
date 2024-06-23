@@ -1,40 +1,64 @@
-// src/components/home/microcomponents/PatientPrescriptions.jsx
+// src/components/panels/patient/PatientPrescriptions.jsx
 
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Table, message, Spin } from 'antd';
+import { getPatientPrescriptions } from '../../../services/api';
 
 const PatientPrescriptions = () => {
   const [prescriptions, setPrescriptions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
-    const fetchPrescriptions = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:8000/api/patient-prescriptions', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setPrescriptions(response.data.prescriptions);
-      } catch (error) {
-        console.error('Error fetching prescriptions:', error);
-      }
-    };
-
     fetchPrescriptions();
   }, []);
 
+  const fetchPrescriptions = async () => {
+    try {
+      const response = await getPatientPrescriptions(token);
+      setPrescriptions(response.data.prescriptions);
+      setLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch prescriptions:", error);
+      message.error("Error al cargar las recetas");
+      setLoading(false);
+    }
+  };
+
+  const columns = [
+    {
+      title: 'ID de Receta',
+      dataIndex: 'id_prescription',
+      key: 'id_prescription',
+    },
+    {
+      title: 'Fecha de Receta',
+      dataIndex: 'prescription_date',
+      key: 'prescription_date',
+    },
+    {
+      title: 'Nombre del Medicamento',
+      dataIndex: 'name_drug',
+      key: 'name_drug',
+    },
+    {
+      title: 'Instrucciones',
+      dataIndex: 'instructions_use',
+      key: 'instructions_use',
+    },
+    {
+      title: 'Fecha de Expiración',
+      dataIndex: 'expiration_date',
+      key: 'expiration_date',
+    },
+  ];
+
   return (
-    <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
-      <h2 className="text-2xl mb-4">Your Prescriptions</h2>
-      {prescriptions.map((prescription) => (
-        <div key={prescription.id} className="bg-white p-4 rounded shadow-md mb-4">
-          <p><strong>Prescription ID:</strong> {prescription.id_prescription}</p>
-          <p><strong>Doctor:</strong> {prescription.name_medic}</p>
-          <p><strong>Drug Name:</strong> {prescription.name_drug}</p>
-          <p><strong>Instructions:</strong> {prescription.instructions_use}</p>
-          <p><strong>Prescription Date:</strong> {new Date(prescription.prescription_date).toLocaleDateString()}</p>
-          <p><strong>Expiration Date:</strong> {new Date(prescription.expiration_date).toLocaleDateString()}</p>
-        </div>
-      ))}
+    <div>
+      <h2>Lista de Recetas</h2>
+      <Spin spinning={loading} size="large">
+        <Table dataSource={prescriptions} columns={columns} rowKey="id_prescription" />
+      </Spin>
     </div>
   );
 };

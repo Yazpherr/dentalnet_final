@@ -49,3 +49,16 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin: 0; /* Para evitar márgenes adicionales */
 }
+
+
+/* src/styles/App.css */
+
+/* Asegúrate de que todos los elementos del menú estén alineados correctamente */
+.ant-menu-item {
+  display: flex;
+  align-items: center;
+}
+
+.ant-menu-item a {
+  flex-grow: 1;
+}

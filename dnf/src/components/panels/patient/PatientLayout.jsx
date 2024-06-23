@@ -1,24 +1,26 @@
-// src/components/microcomponents/PatientLayout.jsx
+// src/components/panels/patient/PatientLayout.jsx
 
-import React from 'react';
-import SidebarLarge from '../../microcomponents/SidebarLarge';
-import SidebarResponsive from '../../microcomponents/SidebarResponsive';
-import { FiHome, FiClipboard } from 'react-icons/fi';
+import { Outlet } from 'react-router-dom';
+import SidebarLarge from '../../UI/SidebarLarge';
+import SidebarResponsive from '../../UI/SidebarResponsive';
 
-const PatientLayout = ({ children }) => {
-  const menuItems = [
-    { path: '/patient/dashboard', name: 'Dashboard', icon: FiHome },
-    { path: '/patient/prescriptions', name: 'Prescriptions', icon: FiClipboard },
-  ];
+const menuItems = [
+  { name: 'Perfil', path: '/patient/dashboard', icon: 'user' },
+  { name: 'Citas', path: '/patient/appointments', icon: 'calendar' },
+  { name: 'Recetas', path: '/patient/prescriptions', icon: 'file' },
+];
 
+const PatientLayout = () => {
   return (
     <div className="flex">
-      <SidebarLarge menuItems={menuItems} />
-      <div className="flex flex-col flex-1">
+      <div className="hidden md:block">
+        <SidebarLarge menuItems={menuItems} />
+      </div>
+      <div className="block md:hidden">
         <SidebarResponsive menuItems={menuItems} />
-        <main className="p-4">
-          {children}
-        </main>
+      </div>
+      <div className="flex-1 p-6">
+        <Outlet />
       </div>
     </div>
   );

@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+// src/components/panels/patient/PatientDashboard.jsx
+
+import { useState, useEffect } from 'react';
+import { Form, Input, Button, Spin, message, Alert } from 'antd';
 import { getPatientProfile, updatePatientProfile } from '../../../services/api';
 
 const PatientDashboard = () => {
@@ -10,8 +13,10 @@ const PatientDashboard = () => {
     medical_conditions: '',
     oral_health_level: 0,
   });
-  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [formMessage, setFormMessage] = useState('');
   const [error, setError] = useState('');
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -22,106 +27,96 @@ const PatientDashboard = () => {
         }
 
         const response = await getPatientProfile(token);
-        setProfile(response);
+        setProfile(response.data.patient);
         setError('');
       } catch (error) {
         console.error('Error fetching profile:', error);
-        setError(error.error || 'Error fetching profile');
+        setError(error.response?.data?.error || 'Error fetching profile');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('Token is missing');
       }
 
-      const response = await updatePatientProfile(token, profile);
-      setMessage(response.message);
+      const response = await updatePatientProfile(token, values);
+      setFormMessage(response.data.message);
       setError('');
+      message.success(response.data.message); // Mostrar mensaje de éxito con antd
     } catch (error) {
       console.error('Error updating profile:', error);
-      setError(error.error || 'Failed to update profile');
+      setError(error.response?.data?.error || 'Failed to update profile');
+      message.error('Error al actualizar el perfil'); // Mostrar mensaje de error con antd
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md mb-6 w-full max-w-md">
-        <h2 className="text-2xl mb-4">Update Profile</h2>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">DNI</label>
-          <input
-            type="text"
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <Spin spinning={loading} size="large">
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          initialValues={profile}
+          className="bg-white p-6 rounded shadow-md mb-6 w-full max-w-md"
+        >
+          <h2 className="text-2xl mb-4">Actualizar Perfil</h2>
+          <Form.Item
             name="dni"
-            value={profile.dni}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">Age</label>
-          <input
-            type="number"
+            label="DNI"
+            rules={[{ required: true, message: 'Por favor, ingresa tu DNI' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name="age"
-            value={profile.age}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">Gender</label>
-          <input
-            type="text"
+            label="Edad"
+            rules={[{ required: true, message: 'Por favor, ingresa tu edad' }]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item
             name="gender"
-            value={profile.gender}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">Phone Number</label>
-          <input
-            type="text"
+            label="Género"
+            rules={[{ required: true, message: 'Por favor, ingresa tu género' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name="phone_number"
-            value={profile.phone_number}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">Medical Conditions</label>
-          <textarea
+            label="Número de Teléfono"
+            rules={[{ required: true, message: 'Por favor, ingresa tu número de teléfono' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
             name="medical_conditions"
-            value={profile.medical_conditions}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">Oral Health Level</label>
-          <input
-            type="number"
+            label="Condiciones Médicas"
+            rules={[{ required: true, message: 'Por favor, ingresa tus condiciones médicas' }]}
+          >
+            <Input.TextArea />
+          </Form.Item>
+          <Form.Item
             name="oral_health_level"
-            value={profile.oral_health_level}
-            onChange={handleChange}
-            className="border rounded w-full py-2 px-3"
-          />
-        </div>
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">Update Profile</button>
-        {message && <p className="mt-4 text-green-500">{message}</p>}
-        {error && <p className="mt-4 text-red-500">{error}</p>}
-      </form>
+            label="Nivel de Salud Oral"
+            rules={[{ required: true, message: 'Por favor, ingresa tu nivel de salud oral' }]}
+          >
+            <Input type="number" />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Actualizar Perfil</Button>
+          </Form.Item>
+          {formMessage && <Alert message={formMessage} type="success" showIcon />}
+          {error && <Alert message={error} type="error" showIcon />}
+        </Form>
+      </Spin>
     </div>
   );
 };

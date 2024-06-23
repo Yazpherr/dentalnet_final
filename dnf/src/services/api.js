@@ -66,13 +66,6 @@ export const createPrescription = (token, formData) => {
   });
 };
 
-// Nueva función para obtener la lista de recetas
-export const getPrescriptions = (token) => {
-  return axios.get(`${API_URL}/doctor/prescriptions`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
-};
-
 // Función para obtener todas los pacientes para administradores
 export const getPatientsForAdmin = (token) => {
   return axios.get(`${API_URL}/admin/patients`, {
@@ -80,3 +73,32 @@ export const getPatientsForAdmin = (token) => {
   });
 };
 
+// Nueva función para obtener la lista de recetas
+export const getPrescriptions = (token) => {
+  return axios.get(`${API_URL}/doctor/prescriptions`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+
+
+// Función para obtener el perfil del paciente
+export const getPatientProfile = (token) => {
+  return axios.get(`${API_URL}/patient/profile`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// Función para actualizar el perfil del paciente
+export const updatePatientProfile = (token, profile) => {
+  return axios.post(`${API_URL}/update-profile`, profile, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// Nueva función para obtener la lista de recetas del paciente
+export const getPatientPrescriptions = (token) => {
+  return axios.get(`${API_URL}/patient/prescriptions`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
