@@ -7,24 +7,30 @@ import Register from "./views/Register";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
+
+
+// PANEL ADMINSITRADOR
+import AdminPanel from "./components/panels/admin/AdminPanel";
+import AdminLayout from "./components/panels/admin/AdminLayout";
+import RegisterDentist from "./components/panels/admin/RegisterDentist";
+
+// PANEL DENTISTA
+import DoctorPanel from "./components/panels/dentist/DentistPanel";
+import DentistLayout from "./components/panels/dentist/DentistLayout";
+import Appointments from './components/panels/patient/Appointments';
+import DoctorAppointments from './components/panels/dentist/DoctorAppointments'; // Asegúrate de importar el componente
+import Patients from "./components/panels/dentist/Patients";
+import Prescriptions from "./components/panels/dentist/Prescriptions";
+
+
+// PANEL PACIENTE 
+import CreateAppointment from './components/panels/patient/CreateAppointment'; 
 import PatientLayout from "./components/panels/patient/PatientLayout";
 import PatientDashboard from "./components/panels/patient/PatientDashboard";
 import PatientPrescriptions from "./components/panels/patient/PatientPrescriptions";
 
 
-import AdminPanel from "./components/panels/admin/AdminPanel";
-import DoctorPanel from "./components/panels/dentist/DentistPanel";
-import DentistLayout from "./components/panels/dentist/DentistLayout";
-import DoctorAppointments from './components/panels/dentist/DoctorAppointments'; // Asegúrate de importar el componente
-
-
-import Appointments from './components/panels/patient/Appointments';
-
 import Home from "./views/Home";
-import AdminLayout from "./components/panels/admin/AdminLayout";
-import RegisterDentist from "./components/panels/admin/RegisterDentist";
-import Patients from "./components/panels/dentist/Patients";
-import Prescriptions from "./components/panels/dentist/Prescriptions";
 
 function App() {
   return (
@@ -46,6 +52,7 @@ function App() {
             <Route path="dashboard" element={<PatientDashboard />} />
             <Route path="prescriptions" element={<PatientPrescriptions />} />
             <Route path="/patient/appointments" element={<Appointments />} />
+            <Route path="create-appointment" element={<CreateAppointment />} /> 
             
           </Route>
 

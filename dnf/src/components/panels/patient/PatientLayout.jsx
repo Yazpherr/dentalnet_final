@@ -6,7 +6,8 @@ import SidebarResponsive from '../../UI/SidebarResponsive';
 
 const menuItems = [
   { name: 'Perfil', path: '/patient/dashboard', icon: 'user' },
-  { name: 'Citas', path: '/patient/appointments', icon: 'calendar' },
+  { name: 'Crear cita ', path: '/patient/create-appointment', icon: 'calendar' },
+  { name: 'Calendario', path: '/patient/appointments', icon: 'calendar' },
   { name: 'Recetas', path: '/patient/prescriptions', icon: 'file' },
 ];
 
