@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       getProfile(token)
         .then(response => {
-          setUser(response.data);
+          setUser({ ...response.data, token }); // Guardar el token en el estado del usuario
         })
         .catch(() => {
           localStorage.removeItem('token');
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const login = (userData) => {
-    setUser(userData);
+    setUser({ ...userData, token: localStorage.getItem('token') }); // Guardar el token en el estado del usuario
     // Redirigir basado en el rol del usuario
     switch(userData.role) {
       case 'admin':

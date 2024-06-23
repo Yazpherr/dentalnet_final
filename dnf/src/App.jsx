@@ -11,9 +11,14 @@ import PatientLayout from "./components/panels/patient/PatientLayout";
 import PatientDashboard from "./components/panels/patient/PatientDashboard";
 import PatientPrescriptions from "./components/panels/patient/PatientPrescriptions";
 
-import DoctorPanel from "./components/panels/dentist/DentistPanel";
+
 import AdminPanel from "./components/panels/admin/AdminPanel";
+import DoctorPanel from "./components/panels/dentist/DentistPanel";
 import DentistLayout from "./components/panels/dentist/DentistLayout";
+import DoctorAppointments from './components/panels/dentist/DoctorAppointments'; // Asegúrate de importar el componente
+
+
+import Appointments from './components/panels/patient/Appointments';
 
 import Home from "./views/Home";
 import AdminLayout from "./components/panels/admin/AdminLayout";
@@ -29,6 +34,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          
           <Route
             path="/patient"
             element={
@@ -39,7 +45,10 @@ function App() {
           >
             <Route path="dashboard" element={<PatientDashboard />} />
             <Route path="prescriptions" element={<PatientPrescriptions />} />
+            <Route path="/patient/appointments" element={<Appointments />} />
+            
           </Route>
+
           <Route
             path="/doctor"
             element={
@@ -51,6 +60,7 @@ function App() {
             <Route index element={<DoctorPanel />} />
             <Route path="patients" element={<Patients />} />
             <Route path="prescriptions" element={<Prescriptions />} />
+            <Route path="/doctor/appointments" element={<DoctorAppointments />} />
           </Route>
           <Route
             path="/admin"

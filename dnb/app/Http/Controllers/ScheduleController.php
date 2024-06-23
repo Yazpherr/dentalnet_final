@@ -8,15 +8,33 @@ use Illuminate\Support\Facades\Validator;
 
 class ScheduleController extends Controller
 {
+
+    // public function index()
+    // {
+    //     try {
+    //         $schedules = Schedule::all();
+    //         return response()->json($schedules, 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Error fetching schedules'], 500);
+    //     }
+    // }
+
+
     public function index()
     {
-        try {
-            $schedules = Schedule::all();
-            return response()->json($schedules, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching schedules'], 500);
-        }
+        $schedules = Schedule::where('status', 'available')->get();
+        return response()->json($schedules, 200);
     }
+
+    // public function index()
+    // {
+    //     try {
+    //         $schedules = Schedule::all();
+    //         return response()->json($schedules, 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Error fetching schedules'], 500);
+    //     }
+    // }
 
     public function store(Request $request)
     {

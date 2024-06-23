@@ -60,8 +60,8 @@ Route::middleware(['auth:api', 'role:patient'])->group(function () {
     Route::post('/book-appointment', [AppointmentController::class, 'bookAppointment']);
 
     Route::get('/patient/appointments', [AppointmentController::class, 'getPatientAppointments']);
-
-
-
 });
+
+
+Route::get('/schedules', [ScheduleController::class, 'index']);
 

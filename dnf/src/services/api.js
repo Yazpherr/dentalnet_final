@@ -80,8 +80,6 @@ export const getPrescriptions = (token) => {
   });
 };
 
-
-
 // Función para obtener el perfil del paciente
 export const getPatientProfile = (token) => {
   return axios.get(`${API_URL}/patient/profile`, {
@@ -99,6 +97,13 @@ export const updatePatientProfile = (token, profile) => {
 // Nueva función para obtener la lista de recetas del paciente
 export const getPatientPrescriptions = (token) => {
   return axios.get(`${API_URL}/patient/prescriptions`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// MODULO DE CITAS MEDICAS__________________________________________
+export const getPatientAppointments = (token) => {
+  return axios.get(`${API_URL}/patient/appointments`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 };

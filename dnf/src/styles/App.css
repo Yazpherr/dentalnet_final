@@ -62,3 +62,11 @@
 .ant-menu-item a {
   flex-grow: 1;
 }
+
+/* src/styles/App.css */
+
+.fc .fc-daygrid-event {
+  background-color: var(--fc-event-bg-color, green);
+  color: white;
+  border: none;
+}
