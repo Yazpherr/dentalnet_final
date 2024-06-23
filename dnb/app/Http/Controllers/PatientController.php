@@ -58,6 +58,15 @@ public function getPatients()
     return response()->json(['patients' => $patients]);
 }
 
+public function getPatientsForAdmin()
+{
+    try {
+        $patients = Patient::with('user')->get();
+        return response()->json(['patients' => $patients], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Failed to fetch patients', 'message' => $e->getMessage()], 500);
+    }
+}
 
 
 

@@ -26,7 +26,7 @@ Route::middleware(['auth:api', 'role:admin'])->group(function () {
     Route::post('/register-dentist', [AuthController::class, 'registerDentist']);
     Route::get('/dentists', [AdminController::class, 'getDentists']);
     Route::get('/patients', [PatientController::class, 'getPatients']);
-
+    Route::get('/admin/patients', [PatientController::class, 'getPatientsForAdmin']); // Nueva ruta para admin
 });
 
 // Rutas para doctores

@@ -45,12 +45,19 @@ export const registerDentist = (token, formData) => {
 };
 
 // Nueva función para obtener la lista de pacientes
+// export const getPatients = (token) => {
+//   return axios.get(`${API_URL}/patients`, {
+//     headers: { Authorization: `Bearer ${token}` }
+//   });
+// };
+
+// Función para obtener todas los pacientes
+
 export const getPatients = (token) => {
-  return axios.get(`${API_URL}/patients`, {
+  return axios.get(`${API_URL}/doctor/patients`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
-
 
 // Nueva función para crear una receta
 export const createPrescription = (token, formData) => {
@@ -65,3 +72,11 @@ export const getPrescriptions = (token) => {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
+
+// Función para obtener todas los pacientes para administradores
+export const getPatientsForAdmin = (token) => {
+  return axios.get(`${API_URL}/admin/patients`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+

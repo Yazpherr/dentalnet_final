@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Col, Row, Spin, message } from 'antd';
-import { getDentists, getPatients } from '../../../services/api';
+import { getDentists, getPatientsForAdmin } from '../../../services/api';
 
 const AdminPanel = () => {
   const [dentistCount, setDentistCount] = useState(0);
@@ -16,8 +16,8 @@ const AdminPanel = () => {
         const dentistResponse = await getDentists(token);
         setDentistCount(dentistResponse.data.dentists.length);
 
-        // Fetch patients count
-        const patientResponse = await getPatients(token);
+        // Fetch patients count for admin
+        const patientResponse = await getPatientsForAdmin(token);
         setPatientCount(patientResponse.data.patients.length);
         
       } catch (error) {

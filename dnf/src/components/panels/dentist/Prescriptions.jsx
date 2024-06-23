@@ -1,13 +1,14 @@
 // src/components/panels/dentist/Prescriptions.jsx
 
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Input, DatePicker, message, Table } from 'antd';
+import { useState, useEffect } from 'react';
+import { Modal, Button, Form, Input, DatePicker, message, Table, Spin } from 'antd';
 import { createPrescription, getPrescriptions } from '../../../services/api';
 
 const Prescriptions = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [prescriptions, setPrescriptions] = useState([]);
+  const [loading, setLoading] = useState(true);  // Estado de carga
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -15,11 +16,14 @@ const Prescriptions = () => {
   }, []);
 
   const fetchPrescriptions = async () => {
+    setLoading(true);  // Mostrar spinner al iniciar la carga
     try {
       const response = await getPrescriptions(token);
       setPrescriptions(response.data.prescriptions);
     } catch (error) {
       console.error("Failed to fetch prescriptions:", error);
+    } finally {
+      setLoading(false);  // Ocultar spinner al finalizar la carga
     }
   };
 
@@ -73,7 +77,9 @@ const Prescriptions = () => {
         <h2>Recetas</h2>
         <Button type="primary" onClick={() => setIsModalVisible(true)}>Agregar Receta</Button>
       </div>
-      <Table dataSource={prescriptions} columns={columns} rowKey="id_prescription" />
+      <Spin spinning={loading}>
+        <Table dataSource={prescriptions} columns={columns} rowKey="id_prescription" />
+      </Spin>
       <Modal
         title="Crear Receta"
         open={isModalVisible}
