@@ -82,7 +82,29 @@ html, body, #root {
   height: 100vh !important; /* Forzar la altura completa */
 }
 
+
+.custom-cancel-button {
+  background-color: #f5f5f5;
+  border-color: #d9d9d9;
+  color: #595959;
+}
+
+.custom-cancel-button:hover {
+  background-color: #d9d9d9;
+  border-color: #d9d9d9;
+}
+
+.custom-update-button {
+  background-color: #003399 !important;
+  border-color: #003399 !important;
+}
+
+.custom-update-button:hover {
+  background-color: #002266 !important;
+  border-color: #002266 !important;
+}
+
 .form-label {
-  color: #4a4a4a; /* Plomo oscuro */
   font-weight: 600; /* Semibold */
+  color: #595959; /* Dark gray color */
 }

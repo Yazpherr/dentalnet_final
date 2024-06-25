@@ -1,6 +1,4 @@
-// src/components/UI/modals/UpdateProfile.jsx
-
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Button, Row, Col } from 'antd';
 import PropTypes from 'prop-types';
 
 const UpdateProfile = ({ visible, onClose, onSubmit, profile, form }) => {
@@ -10,56 +8,63 @@ const UpdateProfile = ({ visible, onClose, onSubmit, profile, form }) => {
       visible={visible}
       onOk={form.submit}
       onCancel={onClose}
-      okText="Guardar"
-      cancelText="Cancelar"
+      footer={null}
     >
       <Form
         form={form}
         onFinish={onSubmit}
         initialValues={profile}
-        className="bg-white p-6 rounded shadow-md mb-6 w-full max-w-md"
+        layout="vertical"
       >
         <Form.Item
           name="dni"
-          label="DNI"
+          label={<span className="form-label">DNI</span>}
           rules={[{ required: true, message: 'Por favor, ingresa tu DNI' }]}
         >
           <Input className="rounded-md custom-input" />
         </Form.Item>
         <Form.Item
           name="age"
-          label="Edad"
+          label={<span className="form-label">Edad</span>}
           rules={[{ required: true, message: 'Por favor, ingresa tu edad' }]}
         >
           <Input type="number" className="rounded-md custom-input" />
         </Form.Item>
         <Form.Item
           name="gender"
-          label="Género"
+          label={<span className="form-label">Género</span>}
           rules={[{ required: true, message: 'Por favor, ingresa tu género' }]}
         >
           <Input className="rounded-md custom-input" />
         </Form.Item>
         <Form.Item
           name="phone_number"
-          label="Número de Teléfono"
+          label={<span className="form-label">Número de Teléfono</span>}
           rules={[{ required: true, message: 'Por favor, ingresa tu número de teléfono' }]}
         >
           <Input className="rounded-md custom-input" />
         </Form.Item>
         <Form.Item
           name="medical_conditions"
-          label="Condiciones Médicas"
-          rules={[{ required: true, message: 'Por favor, ingresa tus condiciones médicas' }]}
+          label={<span className="form-label">Condiciones Médicas</span>}
         >
-          <Input.TextArea className="rounded-md custom-input" />
+          <Input.TextArea className="rounded-md custom-input" disabled />
         </Form.Item>
         <Form.Item
           name="oral_health_level"
-          label="Nivel de Salud Oral"
-          rules={[{ required: true, message: 'Por favor, ingresa tu nivel de salud oral' }]}
+          label={<span className="form-label">Nivel de Salud Oral</span>}
         >
-          <Input type="number" className="rounded-md custom-input" />
+          <Input type="number" className="rounded-md custom-input" disabled />
+        </Form.Item>
+        <Form.Item>
+          <Row gutter={16} justify="end">
+            <Col>
+              <Button onClick={onClose} className="custom-cancel-button">Cancelar</Button>
+            </Col>
+            <Col>
+              <Button type="primary" htmlType="submit" className="custom-update-button">Actualizar</Button>
+            </Col>
+          </Row>
         </Form.Item>
       </Form>
     </Modal>

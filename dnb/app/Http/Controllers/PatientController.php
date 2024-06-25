@@ -35,7 +35,7 @@ class PatientController extends Controller
     }
 
     public function updatePatientAsDoctor(Request $request, $id)
-{
+    {
     $request->validate([
         'dni' => 'nullable|string|max:20|unique:patients,dni,' . $id,
         'age' => 'nullable|integer',

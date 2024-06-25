@@ -52,7 +52,6 @@ export const registerDentist = (token, formData) => {
 // };
 
 // Función para obtener todas los pacientes
-
 export const getPatients = (token) => {
   return axios.get(`${API_URL}/doctor/patients`, {
     headers: { Authorization: `Bearer ${token}` }
@@ -116,6 +115,13 @@ export const getAvailableSchedules = (token) => {
 
 export const bookAppointment = (token, appointmentData) => {
   return axios.post(`${API_URL}/book-appointment`, appointmentData, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// Nueva función para actualizar un paciente como doctor
+export const updatePatientAsDoctor = (token, id, patientData) => {
+  return axios.post(`${API_URL}/doctor/update-patient/${id}`, patientData, {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
