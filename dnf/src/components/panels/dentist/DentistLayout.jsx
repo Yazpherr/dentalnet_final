@@ -3,12 +3,15 @@ import { Outlet } from 'react-router-dom';
 // import SidebarLarge from '../../microcomponents/SidebarLarge';
 import SidebarLarge from '../../UI/SidebarLarge';
 import SidebarResponsive from '../../UI/SidebarResponsive';
-import { FiHome, FiUser, FiClipboard } from 'react-icons/fi'; // Asegúrate de importar los iconos correctos
+import PatientsIcon from "../../../assets/icons/PatientsIcon";
+import PrescriptionIcon from "../../../assets/icons/PrescriptionIcon";
+
+// import HomeIcon from "../../../assets/icons/HomeIcon";
 
 const menuItems = [
-  { name: "Inicio", path: "/doctor", icon: FiHome },
-  { name: "Pacientes", path: "/doctor/patients", icon: FiUser },
-  { name: "Recetas", path: "/doctor/prescriptions", icon: FiClipboard },
+  // { name: "Inicio", path: "/doctor", icon: <HomeIcon />  },
+  { name: "Pacientes", path: "/doctor/patients", icon: <PatientsIcon />  },
+  { name: "Recetas", path: "/doctor/prescriptions", icon: <PrescriptionIcon /> },
   // agrega más items del menú según sea necesario
 ];
 

@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiX, FiLogOut } from 'react-icons/fi';
+import { FiMenu, FiLogOut } from 'react-icons/fi';
 import PropTypes from 'prop-types';
-import { Layout, Menu } from 'antd';
-
-const { Sider } = Layout;
+import { Drawer, Button, Menu } from 'antd';
 
 const SidebarResponsive = ({ menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,52 +15,45 @@ const SidebarResponsive = ({ menuItems }) => {
     <div className="h-full">
       {/* Mobile header */}
       <div className="bg-white shadow-md flex justify-between items-center p-4 md:hidden fixed top-0 w-full z-30">
-        <button onClick={toggleSidebar}>
+        <Button onClick={toggleSidebar}>
           <FiMenu className="w-6 h-6 text-gray-700" />
-        </button>
-        <h1 className={`text-2xl font-bold text-primaryBlue ${isOpen ? 'hidden' : 'block'}`}>DentalNet</h1>
+        </Button>
+        <h1 className={`text-2xl font-bold text-primaryBlue`}>DentalNet</h1>
       </div>
 
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div className="fixed inset-0 z-20 bg-black opacity-50" onClick={toggleSidebar}></div>
-      )}
-
-      {/* Sidebar */}
-      <Sider
-        width={256}
-        className={`fixed top-0 left-0 h-full bg-white shadow-md z-30 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition duration-300 ease-in-out`}
+      {/* Sidebar Drawer */}
+      <Drawer
+        title="DentalNet"
+        placement="left"
+        closable={true}
+        onClose={toggleSidebar}
+        visible={isOpen}
+        bodyStyle={{ padding: 0 }}
       >
-        <div className="flex flex-col h-full">
-          <div className="flex justify-between items-center p-4 border-b border-gray-300">
-            <h1 className="text-2xl font-bold text-primaryBlue">DentalNet</h1>
-            <button onClick={toggleSidebar}>
-              <FiX className="w-6 h-6 text-gray-700" />
-            </button>
-          </div>
-          <Menu mode="inline" className="flex-grow">
-            {menuItems.map((item, index) => (
-              <Menu.Item key={index} icon={item.icon}>
-                <Link to={item.path} onClick={toggleSidebar}>
-                  {item.name}
-                </Link>
-              </Menu.Item>
-            ))}
-          </Menu>
-          <div className="p-4">
-            <button
-              className="w-full bg-red-500 text-white py-2 px-4 rounded flex items-center justify-center"
-              onClick={() => {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
-              }}
-            >
-              <FiLogOut className="inline w-5 h-5 mr-2" />
-              Cerrar sesión
-            </button>
-          </div>
+        <Menu mode="inline">
+          {menuItems.map((item, index) => (
+            <Menu.Item key={index} icon={item.icon}>
+              <Link to={item.path} onClick={toggleSidebar}>
+                {item.name}
+              </Link>
+            </Menu.Item>
+          ))}
+        </Menu>
+        <div className="p-4">
+          <Button
+            type="primary"
+            danger
+            className="w-full flex items-center justify-center"
+            onClick={() => {
+              localStorage.removeItem('token');
+              window.location.href = '/login';
+            }}
+          >
+            <FiLogOut className="inline w-5 h-5 mr-2" />
+            Cerrar sesión
+          </Button>
         </div>
-      </Sider>
+      </Drawer>
     </div>
   );
 };

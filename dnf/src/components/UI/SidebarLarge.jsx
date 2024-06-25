@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Button } from 'antd';
 import PropTypes from 'prop-types';
 import { UserOutlined, CalendarOutlined, FileOutlined } from '@ant-design/icons';
 
@@ -35,8 +35,10 @@ const SidebarLarge = ({ menuItems }) => {
         />
       </div>
       <div className="p-4">
-        <button
-          className="w-full bg-red-600 text-white py-2 px-4 rounded flex items-center justify-center"
+        <Button
+          type="primary"
+          danger
+          className="w-full flex items-center justify-center"
           onClick={() => {
             localStorage.removeItem('token');
             window.location.href = '/login';
@@ -44,7 +46,7 @@ const SidebarLarge = ({ menuItems }) => {
         >
           <FiLogOut className="w-5 h-5 mr-2" />
           Cerrar sesión
-        </button>
+        </Button>
       </div>
     </Sider>
   );
