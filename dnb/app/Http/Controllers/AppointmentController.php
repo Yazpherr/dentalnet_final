@@ -3,38 +3,64 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Dentist;
 use App\Models\Patient;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Mail\AppointmentConfirmation;
+use App\Mail\AppointmentCancellation;
 use Illuminate\Support\Facades\Mail;
 
 class AppointmentController extends Controller
 {
     // Función para obtener todas las citas asociadas al doctor autenticado
-    public function getAppointmentsByDoctor()
-    {
-        try {
-            $doctorId = auth()->user()->id; // Obtiene el ID del doctor autenticado
+    // app/Http/Controllers/AppointmentController.php
+// En App/Http/Controllers/AppointmentController.php
 
-            // Obtener citas del doctor
-            $appointments = Appointment::where('doctor_id', $doctorId)->get();
+public function getAppointmentsByDoctor(Request $request)
+{
+    try {
+        $userId = auth()->user()->id;
+        $appointments = Appointment::with('patient.user')
+            ->where('doctor_id', $userId)
+            ->get();
 
-            return response()->json($appointments, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching doctor appointments', 'message' => $e->getMessage()], 500);
-        }
+        return response()->json($appointments, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error fetching appointments for doctor'], 500);
     }
+}
+
+
+    // public function index()
+    // {
+    //     try {
+    //         $appointments = Appointment::all();
+    //         return response()->json($appointments, 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json(['error' => 'Error fetching appointments'], 500);
+    //     }
+    // }
+
+    // test
     public function index()
-    {
-        try {
-            $appointments = Appointment::all();
-            return response()->json($appointments, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Error fetching appointments'], 500);
+{
+    try {
+        $userId = auth()->user()->id;
+        $doctor = Dentist::where('user_id', $userId)->first();
+
+        if (!$doctor) {
+            return response()->json(['error' => 'Doctor not found'], 404);
         }
+
+        $appointments = Appointment::where('doctor_id', $doctor->id)->with('patient.user')->get();
+        return response()->json($appointments, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error fetching appointments'], 500);
     }
+}
+
 
     public function store(Request $request)
     {
@@ -194,6 +220,57 @@ class AppointmentController extends Controller
             return response()->json(['error' => 'General error: ' . $e->getMessage()], 500);
         }
     }
+
+//     public function cancelAppointment($id)
+// {
+//     try {
+//         $appointment = Appointment::findOrFail($id);
+
+//         // Revertir el estado del horario a disponible
+//         $schedule = Schedule::findOrFail($appointment->schedule_id);
+//         $schedule->status = 'available';
+//         $schedule->save();
+
+//         // Eliminar la cita
+//         $appointment->delete();
+
+//         return response()->json(['message' => 'Cita cancelada exitosamente y el horario está disponible nuevamente.'], 200);
+//     } catch (\Exception $e) {
+//         return response()->json(['error' => 'Error cancelando la cita: ' . $e->getMessage()], 500);
+//     }
+// }
+
+
+public function cancelAppointment($id)
+{
+    try {
+        $appointment = Appointment::findOrFail($id);
+        $schedule = Schedule::findOrFail($appointment->schedule_id);
+
+        // Cambiar el estado del horario a 'available'
+        $schedule->status = 'available';
+        $schedule->save();
+
+        // Información del correo
+        $cancellationDetails = [
+            'patient_name' => $appointment->patient->name,
+            'date' => $appointment->date,
+            'doctor_name' => $appointment->doctor->name,
+            'reason' => $appointment->reason,
+        ];
+
+        // Enviar correo
+        Mail::to($appointment->patient->user->email)->send(new AppointmentCancellation($cancellationDetails));
+
+        // Eliminar la cita
+        $appointment->delete();
+
+        return response()->json(['message' => 'Appointment canceled successfully'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error canceling appointment: ' . $e->getMessage()], 500);
+    }
+}
+
 
     // Función para convertir el nombre del día a una fecha válida
     private function convertDayToDate($dayOfWeek)

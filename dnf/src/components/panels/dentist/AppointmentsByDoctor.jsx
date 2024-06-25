@@ -1,11 +1,8 @@
-import { useEffect, useState, useContext } from 'react';
-import { Table, Spin, message } from 'antd';
-import { AuthContext } from '../../../context/AuthContext';
+import { useEffect, useState } from 'react';
 import { getAppointmentsByDoctor } from '../../../services/api';
+import { Table, Spin, message } from 'antd';
 
-const DoctorAppointments = () => {
-  const { user } = useContext(AuthContext);
-  const token = user ? user.token : null;
+const DoctorAppointments = ({ token }) => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -21,9 +18,7 @@ const DoctorAppointments = () => {
       }
     };
 
-    if (token) {
-      fetchAppointments();
-    }
+    fetchAppointments();
   }, [token]);
 
   const columns = [

@@ -1,22 +1,17 @@
-// src/components/panels/dentist/DentistLayout.jsx
 import { Outlet } from 'react-router-dom';
-// import SidebarLarge from '../../microcomponents/SidebarLarge';
 import SidebarLarge from '../../UI/SidebarLarge';
 import SidebarResponsive from '../../UI/SidebarResponsive';
 import PatientsIcon from "../../../assets/icons/PatientsIcon";
 import PrescriptionIcon from "../../../assets/icons/PrescriptionIcon";
-
-// import HomeIcon from "../../../assets/icons/HomeIcon";
+import DiaryIcon from "../../../assets/icons/DiaryIcon";
 
 const menuItems = [
-  // { name: "Inicio", path: "/doctor", icon: <HomeIcon />  },
   { name: "Pacientes", path: "/doctor/patients", icon: <PatientsIcon />  },
   { name: "Recetas", path: "/doctor/prescriptions", icon: <PrescriptionIcon /> },
-  // agrega más items del menú según sea necesario
+  { name: "Mi Agenda", path: "/doctor/appointments", icon: <DiaryIcon /> },
 ];
 
 const DentistLayout = () => {
-
   return (
     <div className="flex">
       <div className="hidden md:block">
@@ -31,4 +26,5 @@ const DentistLayout = () => {
     </div>
   );
 };
+
 export default DentistLayout;

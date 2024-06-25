@@ -7,11 +7,13 @@ import SidebarResponsive from '../../UI/SidebarResponsive';
 import HomeIcon from "../../../assets/icons/HomeIcon";
 import AppointmentIcon from "../../../assets/icons/AppointmentIcon";
 import DiaryIcon from "../../../assets/icons/DiaryIcon";
+import DiaryModIcon from "../../../assets/icons/DiaryModIcon";
 import PrescriptionIcon from "../../../assets/icons/PrescriptionIcon";
 
 const menuItems = [
   { name: 'Dashboard', path: '/patient/dashboard', icon: <HomeIcon /> },
   { name: 'Crear cita', path: '/patient/create-appointment', icon: <AppointmentIcon /> },
+  { name: 'Mis citas', path: '/patient/my-appointments', icon: <DiaryModIcon /> },
   { name: 'Agenda', path: '/patient/appointments', icon: <DiaryIcon /> },
   { name: 'Recetas', path: '/patient/prescriptions', icon: <PrescriptionIcon /> },
 ];

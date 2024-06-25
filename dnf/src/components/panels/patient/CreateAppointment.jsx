@@ -13,6 +13,7 @@ const CreateAppointment = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [patientId, setPatientId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [bookingLoading, setBookingLoading] = useState(false);
   const { user } = useContext(AuthContext);
 
   useEffect(() => {
@@ -58,19 +59,24 @@ const CreateAppointment = () => {
       return;
     }
 
+    setBookingLoading(true);
+
     try {
       const appointmentData = {
         schedule_id: selectedSchedule.id,
         reason: reason,
-        patient_id: patientId, // Usamos el patient_id obtenido de la tabla de pacientes
+        patient_id: patientId,
       };
       await bookAppointment(user.token, appointmentData);
       message.success('¡Cita reservada con éxito!');
       setIsModalVisible(false);
-      // Refrescar o redirigir según sea necesario
+      setSelectedSchedule(null);
+      setReason('');
     } catch (error) {
       console.error('Error al reservar la cita:', error);
       message.error('Error al reservar la cita.');
+    } finally {
+      setBookingLoading(false);
     }
   };
 
@@ -112,7 +118,12 @@ const CreateAppointment = () => {
           <Button key="cancel" onClick={handleCancel}>
             Cancelar
           </Button>,
-          <Button key="submit" type="primary" onClick={handleBookAppointment}>
+          <Button
+            key="submit"
+            type="primary"
+            onClick={handleBookAppointment}
+            loading={bookingLoading}
+          >
             Reservar Cita
           </Button>,
         ]}

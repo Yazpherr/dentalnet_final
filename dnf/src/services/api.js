@@ -125,3 +125,18 @@ export const updatePatientAsDoctor = (token, id, patientData) => {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
+
+// Nueva función para obtener las citas por doctor
+export const getAppointmentsByDoctor = (token) => {
+  return axios.get(`${API_URL}/appointments`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+
+// Nueva función para cancelar citas
+export const cancelAppointment = (token, id) => {
+  return axios.delete(`${API_URL}/cancel-appointment/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+};
+

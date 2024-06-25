@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { message } from 'antd';
 import PatientsTable from '../../UI/tables/PatientsTable';
 import UpdatePatientAsDoctor from '../../UI/modals/UpdatePatientAsDoctor';
@@ -43,7 +43,7 @@ const Patients = () => {
 
   return (
     <div>
-      <h2>Lista de Pacientes</h2>
+      <h2 className='font-semibold text-primaryBlue text-2xl pb-2'>Lista de Pacientes</h2>
       <PatientsTable token={token} handleUpdate={handleUpdate} patients={patients} loading={loading} />
       <UpdatePatientAsDoctor
         visible={isModalVisible}

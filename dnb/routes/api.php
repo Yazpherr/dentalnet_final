@@ -50,8 +50,9 @@ Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
-    // Nueva ruta para obtener citas por doctor
+    // Nueva ruta para obtener citas por doctor | posible eliminacion
     Route::get('/doctor/appointments', [AppointmentController::class, 'getAppointmentsByDoctor']);
+
 });
 
 // Rutas para pacientes
@@ -62,9 +63,10 @@ Route::middleware(['auth:api', 'role:patient'])->group(function () {
     Route::get('/patient/profile', [PatientController::class, 'getProfile']);  // Nueva ruta para obtener el perfil del pacientes
 // citas medicas
     Route::get('/available-schedules', [ScheduleController::class, 'getAvailableSchedules']);
-    Route::post('/book-appointment', [AppointmentController::class, 'bookAppointment']);
     Route::get('/patient/appointments', [AppointmentController::class, 'getPatientAppointments']);
     Route::get('/patient/details', [PatientController::class, 'getPatientDetails']);
+    Route::post('/book-appointment', [AppointmentController::class, 'bookAppointment']);               // agendar
+    Route::delete('/cancel-appointment/{id}', [AppointmentController::class, 'cancelAppointment']);    // desagemdar
 });
 
 Route::get('/schedules', [ScheduleController::class, 'index']);
