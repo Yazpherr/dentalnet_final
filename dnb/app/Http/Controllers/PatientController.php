@@ -82,5 +82,23 @@ class PatientController extends Controller
         }
     }
 
+    // app/Http/Controllers/PatientController.php
+
+public function getPatientDetails(Request $request)
+{
+    try {
+        $userId = $request->user()->id;
+        $patient = Patient::where('user_id', $userId)->first();
+
+        if (!$patient) {
+            return response()->json(['error' => 'Patient not found'], 404);
+        }
+
+        return response()->json($patient, 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Error fetching patient details'], 500);
+    }
+}
+
 
 }

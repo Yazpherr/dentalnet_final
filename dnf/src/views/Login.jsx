@@ -5,15 +5,16 @@ import { login as authLogin } from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 import NavBarSoloLogo from '../components/home/NavBarSoloLogo';
 
-
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [loading, setLoading] = useState(false); // Estado de carga
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogin = async (values) => {
+    setLoading(true); // Mostrar el indicador de carga
     try {
       const response = await authLogin(values.email, values.password);
       localStorage.setItem('token', response.data.token);
@@ -31,6 +32,8 @@ const Login = () => {
       }
     } catch (error) {
       setErrorMessage('Credenciales incorrectas');
+    } finally {
+      setLoading(false); // Ocultar el indicador de carga
     }
   };
 
@@ -87,7 +90,12 @@ const Login = () => {
                 />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" className="w-full h-10 custom-login-button">
+                <Button 
+                  type="primary" 
+                  htmlType="submit" 
+                  className="w-full h-10 font-bold custom-login-button"
+                  loading={loading} // Indicador de carga
+                >
                   Iniciar sesión
                 </Button>
               </Form.Item>

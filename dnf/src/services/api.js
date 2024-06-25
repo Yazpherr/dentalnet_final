@@ -108,14 +108,12 @@ export const getPatientAppointments = (token) => {
   });
 };
 
-// Nueva función para obtener la lista de horarios disponibles
 export const getAvailableSchedules = (token) => {
   return axios.get(`${API_URL}/available-schedules`, {
     headers: { Authorization: `Bearer ${token}` }
   });
 };
 
-// Nueva función para reservar una cita
 export const bookAppointment = (token, appointmentData) => {
   return axios.post(`${API_URL}/book-appointment`, appointmentData, {
     headers: { Authorization: `Bearer ${token}` }

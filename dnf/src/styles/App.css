@@ -16,6 +16,15 @@
   background-color: #002266 !important; /* Cambia el color en hover si lo deseas */
   border-color: #002266 !important;
 }
+.custom-register-button {
+  background-color: #003399 !important;
+  border-color: #003399 !important;
+}
+
+.custom-register-button:hover {
+  background-color: #002266 !important; /* Cambia el color en hover si lo deseas */
+  border-color: #002266 !important;
+}
 
 .custom-input {
   height: 40px; /* Ajusta la altura según sea necesario */

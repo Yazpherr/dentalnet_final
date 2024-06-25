@@ -5,16 +5,20 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { AuthContext } from '../../../context/AuthContext';
 import { getPatientAppointments } from '../../../services/api';
 
+// Configuración para que el calendario esté en español
+import 'moment/locale/es';
+moment.locale('es');
+
 const localizer = momentLocalizer(moment);
 
 const Appointments = () => {
   const [appointments, setAppointments] = useState([]);
-  const { user } = useContext(AuthContext); // Obtener el usuario autenticado del contexto
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await getPatientAppointments(user.token); // Pasar el token del usuario
+        const response = await getPatientAppointments(user.token);
         setAppointments(response.data);
       } catch (error) {
         console.error('Error fetching appointments:', error);
@@ -28,8 +32,8 @@ const Appointments = () => {
 
   const events = appointments.map(appointment => ({
     title: appointment.reason,
-    start: new Date(appointment.date),
-    end: new Date(appointment.date),
+    start: moment(appointment.date).toDate(),
+    end: moment(appointment.date).add(30, 'minutes').toDate(), // Ajusta la duración según sea necesario
   }));
 
   return (
@@ -41,6 +45,20 @@ const Appointments = () => {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 500 }}
+        messages={{
+          today: 'Hoy',
+          previous: 'Atrás',
+          next: 'Siguiente',
+          month: 'Mes',
+          week: 'Semana',
+          day: 'Día',
+          agenda: 'Agenda',
+          date: 'Fecha',
+          time: 'Hora',
+          event: 'Evento',
+          noEventsInRange: 'No hay eventos en este rango',
+          showMore: total => `+ Ver más (${total})`
+        }}
       />
     </div>
   );

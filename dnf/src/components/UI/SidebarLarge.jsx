@@ -2,8 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { FiLogOut } from 'react-icons/fi';
 import { Layout, Menu } from 'antd';
 import PropTypes from 'prop-types';
-
-// Importar los íconos necesarios
 import { UserOutlined, CalendarOutlined, FileOutlined } from '@ant-design/icons';
 
 const { Sider } = Layout;
@@ -11,7 +9,6 @@ const { Sider } = Layout;
 const SidebarLarge = ({ menuItems }) => {
   const location = useLocation();
 
-  // Mapear menuItems a la estructura que requiere Ant Design
   const iconMap = {
     user: <UserOutlined />,
     calendar: <CalendarOutlined />,
@@ -20,14 +17,14 @@ const SidebarLarge = ({ menuItems }) => {
 
   const menuItemsAntD = menuItems.map((item) => ({
     key: item.path,
-    icon: iconMap[item.icon],
+    icon: typeof item.icon === 'string' ? iconMap[item.icon] : item.icon,
     label: <Link to={item.path}>{item.name}</Link>,
   }));
 
   return (
-    <Sider width={256} className="site-layout-background flex flex-col h-screen border-r border-gray-300">
-      <div className="flex-grow">
-        <div className="p-4 text-center">
+    <Sider width={256} className="flex flex-col h-screen border-r border-gray-300">
+      <div className="flex-grow flex flex-col">
+        <div className="p-4 text-center border-b border-gray-300">
           <h1 className="text-2xl font-bold text-primaryBlue">DentalNet</h1>
         </div>
         <Menu
@@ -37,7 +34,7 @@ const SidebarLarge = ({ menuItems }) => {
           style={{ borderRight: 0 }}
         />
       </div>
-      <div className="p-4 mt-auto">
+      <div className="p-4">
         <button
           className="w-full bg-red-600 text-white py-2 px-4 rounded flex items-center justify-center"
           onClick={() => {
@@ -58,7 +55,7 @@ SidebarLarge.propTypes = {
     PropTypes.shape({
       path: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
-      icon: PropTypes.oneOf(['user', 'calendar', 'file']).isRequired,
+      icon: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
     })
   ).isRequired,
 };

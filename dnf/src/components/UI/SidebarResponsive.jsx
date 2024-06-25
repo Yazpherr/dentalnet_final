@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiMenu, FiHome, FiUserPlus, FiClipboard, FiLogOut, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiLogOut } from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import { Layout, Menu } from 'antd';
+
+const { Sider } = Layout;
 
 const SidebarResponsive = ({ menuItems }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +14,7 @@ const SidebarResponsive = ({ menuItems }) => {
   };
 
   return (
-    <div>
+    <div className="h-full">
       {/* Mobile header */}
       <div className="bg-white shadow-md flex justify-between items-center p-4 md:hidden fixed top-0 w-full z-30">
         <button onClick={toggleSidebar}>
@@ -25,35 +29,52 @@ const SidebarResponsive = ({ menuItems }) => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed top-0 left-0 h-full bg-white shadow-md z-30 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition duration-300 ease-in-out`}>
-        <div className="flex justify-between items-center p-4">
-          <h1 className="text-2xl font-bold text-primaryBlue">DentalNet</h1>
-          <button onClick={toggleSidebar}>
-            <FiX className="w-6 h-6 text-gray-700" />
-          </button>
+      <Sider
+        width={256}
+        className={`fixed top-0 left-0 h-full bg-white shadow-md z-30 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition duration-300 ease-in-out`}
+      >
+        <div className="flex flex-col h-full">
+          <div className="flex justify-between items-center p-4 border-b border-gray-300">
+            <h1 className="text-2xl font-bold text-primaryBlue">DentalNet</h1>
+            <button onClick={toggleSidebar}>
+              <FiX className="w-6 h-6 text-gray-700" />
+            </button>
+          </div>
+          <Menu mode="inline" className="flex-grow">
+            {menuItems.map((item, index) => (
+              <Menu.Item key={index} icon={item.icon}>
+                <Link to={item.path} onClick={toggleSidebar}>
+                  {item.name}
+                </Link>
+              </Menu.Item>
+            ))}
+          </Menu>
+          <div className="p-4">
+            <button
+              className="w-full bg-red-500 text-white py-2 px-4 rounded flex items-center justify-center"
+              onClick={() => {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+              }}
+            >
+              <FiLogOut className="inline w-5 h-5 mr-2" />
+              Cerrar sesión
+            </button>
+          </div>
         </div>
-        <ul className="mt-6">
-          {menuItems.map((item, index) => (
-            <li key={index} className="my-2">
-              <Link to={item.path} className="flex items-center text-gray-700 hover:text-green-600 p-2 rounded transition duration-300" onClick={toggleSidebar}>
-                <item.icon className="w-5 h-5 mr-3" />
-                {item.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="absolute bottom-0 w-full p-4">
-          <button className="w-full bg-red-500 text-white py-2 px-4 rounded" onClick={() => {
-            localStorage.removeItem('token');
-            window.location.href = '/login';
-          }}>
-            <FiLogOut className="inline w-5 h-5 mr-2" />
-            Cerrar sesión
-          </button>
-        </div>
-      </div>
+      </Sider>
     </div>
   );
+};
+
+SidebarResponsive.propTypes = {
+  menuItems: PropTypes.arrayOf(
+    PropTypes.shape({
+      path: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.node.isRequired, // Acepta cualquier nodo React
+    })
+  ).isRequired,
 };
 
 export default SidebarResponsive;
