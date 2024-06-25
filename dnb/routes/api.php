@@ -34,19 +34,24 @@ Route::middleware(['auth:api', 'role:doctor'])->group(function () {
     Route::get('/doctor', [DentistController::class, 'index']);
     Route::get('/doctor/patients', [PatientController::class, 'getPatients']);  // lista de pacientes
     Route::post('/doctor/update-patient/{id}', [PatientController::class, 'updatePatientAsDoctor']); // modificar paciente del lado del doctor
-    // modulos recetas
+
+    // MODULOS CITAS MEDICAS DOCTOR__________________________________________________________________
     Route::post('/create-prescription', [PrescriptionController::class, 'createPrescription']); // crear receta
     Route::get('/doctor/prescriptions', [PrescriptionController::class, 'getAllPrescriptions']); // obtener todas las recetas
 
-    // Rutas para horarios y citas
+    // MODULOS CITAS HORARIOS  DOCTOR__________________________________________________________________
     Route::get('/schedules', [ScheduleController::class, 'index']);
     Route::post('/schedules', [ScheduleController::class, 'store']);
     Route::put('/schedules/{id}', [ScheduleController::class, 'update']);
     Route::delete('/schedules/{id}', [ScheduleController::class, 'destroy']);
+
+    // MODULOS CITAS MEDICAS DOCTOR__________________________________________________________________
     Route::get('/appointments', [AppointmentController::class, 'index']);
     Route::post('/appointments', [AppointmentController::class, 'store']);
     Route::put('/appointments/{id}', [AppointmentController::class, 'update']);
     Route::delete('/appointments/{id}', [AppointmentController::class, 'destroy']);
+    // Nueva ruta para obtener citas por doctor
+    Route::get('/doctor/appointments', [AppointmentController::class, 'getAppointmentsByDoctor']);
 });
 
 // Rutas para pacientes
